@@ -1,0 +1,267 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import TrustBadge from '../components/TrustBadge.astro';
+import CTASection from '../components/CTASection.astro';
+import { site } from '../data/site';
+import { medicalWebPageNode, breadcrumbNode } from '../lib/schema';
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Sobre', href: '/sobre' },
+];
+const schemaNodes = [
+  medicalWebPageNode({
+    path: '/sobre',
+    name: 'Conheça a Dra. Vitória Gomes',
+    description:
+      'Médica com abordagem funcional integrativa. Acolhimento, ciência e cuidado da pessoa inteira. CRM/CE 28.844.',
+  }),
+  breadcrumbNode(breadcrumb, '/sobre'),
+];
+---
+
+<BaseLayout
+  title="Sobre a Dra. Vitória Gomes | Médica"
+  description="Médica com abordagem funcional integrativa. Acolhimento, ciência e cuidado da pessoa inteira. CRM/CE 28.844."
+  schemaNodes={schemaNodes}
+>
+  <Section band="dark" class="sobre-hero">
+    <Breadcrumb items={breadcrumb} class="sobre-hero__crumb" />
+    <span class="eyebrow">Quem cuida de você</span>
+    <h1>Conheça a Dra. Vitória Gomes</h1>
+    <p class="sobre-hero__lead anchor-phrase">
+      Eu escolhi a medicina que olha a pessoa inteira, e escrevo isso com gratidão.
+    </p>
+    <TrustBadge class="sobre-hero__badge" />
+  </Section>
+
+  <Section band="light">
+    <div class="sobre-grid">
+      <div class="sobre-media">
+        <img
+          class="sobre-photo"
+          src="/images/sobre/vitoria.webp"
+          width="900"
+          height="1125"
+          alt="Dra. Vitória Gomes, médica, sorrindo em retrato com luz natural quente"
+          loading="lazy"
+        />
+        <div class="sobre-creds">
+          <p class="sobre-creds__title">Formação e registro</p>
+          <ul>
+            <li><strong>Médica</strong> · {site.crm}</li>
+            <li>Graduação em Medicina pela Universidade Federal do Cariri (UFCA/CE)</li>
+            <li>Pós-graduanda em Psiquiatria</li>
+            <li>Dedicação à Medicina do Estilo de Vida e ao cuidado integrativo</li>
+            {site.rqe && <li>{site.rqe}</li>}
+          </ul>
+        </div>
+      </div>
+
+      <div class="prose sobre-text">
+        <p class="lead">
+          Sou médica, cearense, e cuido de saúde mental de um jeito que talvez
+          você ainda não tenha encontrado: olhando você por inteiro, o sintoma,
+          sim, mas também o sono, o corpo, a sua história e o que te dá sentido.
+        </p>
+        <p>
+          A minha história com a medicina começou como a de muita gente do
+          interior: um sonho grande, uma caminhada que muitas vezes pareceu
+          solitária. Tem uma imagem que eu guardo com carinho, a de correr
+          sozinha atrás desse sonho até que, no caminho, ele foi ganhando
+          companhia. Cada pessoa que confiou em mim, desde a graduação, faz parte
+          dessa caminhada.
+        </p>
+        <blockquote>
+          “Aos pacientes, desde a graduação até hoje, serei eternamente grata pela
+          confiança que depositaram em mim. Isso me faz querer ser mais e melhor,
+          constantemente. ♥️”
+        </blockquote>
+        <p>
+          Ao longo da formação, uma inquietação foi ficando clara: muita gente
+          chega à consulta se sentindo “quebrada”, tratada como mais um
+          diagnóstico na fila, sem nunca ter sido escutada por inteiro. Foi por
+          isso que escolhi cuidar da saúde mental com uma <strong>abordagem
+          metabólica</strong>, porque a mente não adoece isolada do resto da
+          vida, e cuidar de verdade é juntar as pontas.
+        </p>
+
+        <h2>No que eu acredito</h2>
+        <p>
+          Acredito que <strong>saúde mental é a pessoa inteira, não só a química
+          do cérebro</strong>. Que o remédio, quando é preciso, é cuidado, não
+          fracasso, mas é parte do caminho, não o caminho inteiro. E que não
+          existe paciente padrão: existe a sua história.
+        </p>
+        <p>
+          A fé faz parte de quem eu sou, e aparece com leveza no meu jeito de
+          cuidar, como acolhimento e sentido, nunca como imposição. Eu acolho
+          você seja qual for a sua crença. Tem coisas que a medicina cuida, e tem
+          uma paz que vem de outro lugar: eu respeito e caminho com você nas duas.
+        </p>
+
+        <h2>Por que atendo online</h2>
+        <p>
+          Sou cearense, atendo daqui de Fortaleza, e conheço de perto o que é a
+          distância entre alguém que precisa de cuidado e um psiquiatra, sobretudo
+          fora dos grandes centros. A
+          telemedicina, pra mim, é uma forma de encurtar essa distância, de levar
+          um cuidado sério, humano e com ciência a quem está em qualquer canto do
+          Brasil, sem precisar pegar estrada. É medicina de verdade, com o mesmo
+          sigilo e a mesma seriedade do presencial.
+        </p>
+        <p class="sobre-anchor">
+          “Você não precisa estar no fundo do poço pra merecer cuidado.”
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section band="mid" tight>
+    <div class="values">
+      <div class="value">
+        <span class="value__mark">✦</span>
+        <h3>Escuta antes de receita</h3>
+        <p>A consulta começa pela sua história, com tempo de verdade para ouvir você.</p>
+      </div>
+      <div class="value">
+        <span class="value__mark">✦</span>
+        <h3>Ciência com acolhimento</h3>
+        <p>Rigor médico e calor humano não se opõem, eles se somam no cuidado.</p>
+      </div>
+      <div class="value">
+        <span class="value__mark">✦</span>
+        <h3>Sem julgamento</h3>
+        <p>Aqui a sua dor é levada a sério, sem que você precise justificá-la.</p>
+      </div>
+    </div>
+  </Section>
+
+  <CTASection
+    heading="Se isso ressoou em você, eu vou adorar te receber"
+    body="A consulta é online, acolhedora e sem pressa. Vamos conversar quando você sentir que é a hora."
+    anchorPhrase="Não existe paciente padrão. Existe a sua história."
+  />
+</BaseLayout>
+
+<style>
+  .sobre-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .sobre-hero__lead {
+    color: var(--color-clay);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    max-width: 26ch;
+    margin: 1rem 0 1.75rem;
+  }
+  .sobre-hero__badge {
+    color: var(--color-sand) !important;
+  }
+
+  .sobre-grid {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 960px) {
+    .sobre-grid {
+      grid-template-columns: 0.85fr 1.15fr;
+      align-items: start;
+    }
+  }
+  .sobre-media {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .sobre-photo {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    box-shadow: var(--shadow-soft);
+  }
+  .sobre-creds {
+    background: var(--color-cream);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+  }
+  .sobre-creds__title {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-clay);
+    margin: 0 0 0.8rem;
+  }
+  .sobre-creds ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+  }
+  .sobre-creds li {
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .sobre-creds li::before {
+    content: '·';
+    position: absolute;
+    left: 0.2rem;
+    color: var(--color-clay);
+    font-weight: 700;
+  }
+
+  .sobre-text blockquote {
+    margin: 1.5rem 0;
+    padding: 1.25rem 1.5rem;
+    border-left: 3px solid var(--color-clay);
+    background: var(--color-ivory);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: var(--color-coffee);
+  }
+  .sobre-anchor {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--color-mocha);
+    border-top: 2px solid var(--color-clay);
+    padding-top: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .values {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .values {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .value__mark {
+    color: var(--color-clay);
+    font-size: 1.3rem;
+  }
+  .value h3 {
+    margin: 0.5rem 0 0.4rem;
+  }
+  .value p {
+    margin: 0;
+    color: var(--color-sand);
+    font-size: 0.95rem;
+  }
+</style>

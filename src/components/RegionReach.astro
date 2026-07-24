@@ -1,0 +1,175 @@
+---
+/**
+ * Presença/alcance por região.
+ *  - hasPhysicalPresence=true (Ceará/Fortaleza/Serra): mapa Google Maps Embed
+ *    (iframe, key por env, lazy). NUNCA forjar consultório onde não há.
+ *  - caso contrário: visualização de alcance NACIONAL (sem pin físico falso).
+ */
+import { site } from '../data/site';
+
+interface Props {
+  hasPhysicalPresence: boolean;
+  mapQuery?: string;
+  mapHeading?: string;
+  regionName: string;
+}
+const { hasPhysicalPresence, mapQuery, mapHeading, regionName } = Astro.props;
+
+const mapsKey = import.meta.env.GOOGLE_MAPS_EMBED_KEY as string | undefined;
+const showMap = hasPhysicalPresence && !!mapQuery && !!mapsKey;
+const mapSrc = showMap
+  ? `https://www.google.com/maps/embed/v1/place?key=${mapsKey}&q=${encodeURIComponent(
+      mapQuery!
+    )}&language=pt-BR`
+  : null;
+---
+
+<div class="reach">
+  {
+    hasPhysicalPresence ? (
+      <div class="reach__physical">
+        <h2 class="reach__heading">
+          {mapHeading ?? `Atendimento online para ${regionName} e todo o Brasil`}
+        </h2>
+        {showMap ? (
+          <div class="reach__map">
+            <iframe
+              title={`Localização de referência: ${mapQuery}`}
+              src={mapSrc}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            />
+          </div>
+        ) : (
+          <div class="reach__map reach__map--placeholder">
+            <span class="reach__pin" aria-hidden="true">📍</span>
+            <span class="reach__place">{site.base.cidade} · {site.base.uf}</span>
+          </div>
+        )}
+        <p class="reach__note">
+          A Dra. Vitória é cearense e tem base em {site.base.cidade}, {site.base.uf}.
+          O atendimento é <strong>100% online</strong>, a referência de origem não é
+          um consultório para atendimento presencial.
+        </p>
+      </div>
+    ) : (
+      <div class="reach__national">
+        <div class="reach__brasil" aria-hidden="true">
+          <span class="reach__pin">📍</span>
+          <span class="reach__brasil-label">Brasil</span>
+        </div>
+        <div class="reach__national-text">
+          <h2 class="reach__heading">Atendimento online para {regionName} e todo o Brasil</h2>
+          <p>
+            Não há consultório físico para atendimento presencial {regionName}: o
+            cuidado chega até você por <strong>telemedicina</strong>, de onde você
+            estiver. A distância deixa de ser barreira, onde tiver internet, tem
+            acesso a um cuidado médico de qualidade.
+          </p>
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .reach__heading {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    margin-bottom: 1.2rem;
+  }
+  .reach__map {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    aspect-ratio: 16 / 9;
+    background: var(--color-cream);
+  }
+  .reach__map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .reach__map--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    border: 1px dashed var(--color-line);
+    text-align: center;
+  }
+  .reach__map--placeholder .reach__pin {
+    font-size: 1.6rem;
+  }
+  .reach__place {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--color-coffee);
+    letter-spacing: 0.02em;
+  }
+  .reach__map--placeholder code {
+    background: var(--color-cream);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  .reach__note {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+  .band-dark .reach__note,
+  .band-mid .reach__note {
+    color: var(--color-sand);
+  }
+
+  .reach__national {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (min-width: 768px) {
+    .reach__national {
+      grid-template-columns: 200px 1fr;
+    }
+  }
+  .reach__brasil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(
+      circle at 50% 40%,
+      color-mix(in srgb, var(--color-clay) 30%, transparent),
+      transparent 70%
+    );
+    border: 1px solid var(--color-line);
+  }
+  .band-dark .reach__brasil,
+  .band-mid .reach__brasil {
+    border-color: var(--color-line-dark);
+  }
+  .reach__pin {
+    font-size: 2.5rem;
+  }
+  .reach__brasil-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-style: italic;
+  }
+  .reach__national-text p {
+    color: var(--text-muted);
+    max-width: 60ch;
+    margin: 0;
+  }
+  .band-dark .reach__national-text p,
+  .band-mid .reach__national-text p {
+    color: var(--color-sand);
+  }
+</style>

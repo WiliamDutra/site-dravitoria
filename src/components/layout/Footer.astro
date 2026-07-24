@@ -1,0 +1,271 @@
+---
+import { site, whatsappLink, mensagemAgendamento } from '../../data/site';
+import {
+  footerCondicoes,
+  footerInstitucional,
+  footerLegal,
+  footerRegioes,
+} from '../../data/nav';
+
+const ano = 2026; // fuso America/Fortaleza, atualizar anualmente
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Marca + identificação médica -->
+      <div class="footer-brand">
+        <p class="footer-name">{site.nome}</p>
+        <p class="footer-id">
+          <strong>Médica</strong> · {site.crm}{site.rqe ? ` · ${site.rqe}` : ''}
+        </p>
+        <p class="footer-tagline">{site.especialidade}</p>
+        <p class="footer-reach">{site.alcance} · Base em {site.base.cidade}, {
+            site.base.uf
+          }.</p>
+        <div class="footer-social">
+          <a
+            href={site.canais.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer">Instagram {site.canais.instagram}</a
+          >
+          <a
+            href={whatsappLink(mensagemAgendamento)}
+            target="_blank"
+            rel="noopener noreferrer">WhatsApp</a
+          >
+        </div>
+      </div>
+
+      <!-- Condições -->
+      <nav class="footer-col" aria-label="Condições e serviços">
+        <h2 class="footer-heading">Condições</h2>
+        <ul>
+          {
+            footerCondicoes.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- Institucional -->
+      <nav class="footer-col" aria-label="Institucional">
+        <h2 class="footer-heading">Institucional</h2>
+        <ul>
+          {
+            footerInstitucional.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- Regiões (Atendo também em…) -->
+      <nav class="footer-col" aria-label="Atendo também em">
+        <h2 class="footer-heading">Atendo também em…</h2>
+        <ul>
+          {
+            footerRegioes.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Emergência -->
+    <div class="footer-emergency" role="note">
+      <strong>Em crise ou pensando em se machucar?</strong>
+      Ligue para o <a href={`tel:${site.emergencia.cvv}`}>CVV {
+        site.emergencia.cvv
+      }</a> (24h, gratuito e sigiloso) ou procure a emergência pelo <a
+        href={`tel:${site.emergencia.samu}`}>SAMU {site.emergencia.samu}</a
+      >. Você não está sozinha.
+    </div>
+
+    <!-- Base legal + disclaimer -->
+    <div class="footer-legal">
+      <p class="footer-disclaimer">{site.disclaimers.conteudoEducativo}</p>
+      <div class="footer-bottom">
+        <p>© {ano} {site.nome}, {site.identificacaoMedica}. Todos os direitos reservados.</p>
+        <ul class="footer-legal-links">
+          {
+            footerLegal.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-espresso);
+    color: var(--color-ivory);
+    padding-block: clamp(3.5rem, 7vw, 5rem) 2rem;
+    font-size: 0.9rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 640px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 0.4rem;
+    color: var(--color-ivory);
+  }
+  .footer-id {
+    margin: 0 0 0.3rem;
+    color: var(--color-sand);
+    letter-spacing: 0.02em;
+  }
+  .footer-id strong {
+    color: var(--color-ivory);
+    font-weight: 500;
+  }
+  .footer-tagline {
+    margin: 0 0 0.6rem;
+    color: var(--color-clay);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    max-width: 34ch;
+  }
+  .footer-reach {
+    margin: 0 0 1rem;
+    color: var(--color-sand);
+    max-width: 40ch;
+  }
+  .footer-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-social a {
+    color: var(--color-ivory);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-clay);
+    padding-bottom: 2px;
+    font-size: 0.85rem;
+  }
+  .footer-social a:hover {
+    color: var(--color-clay);
+  }
+
+  .footer-heading {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-clay);
+    margin: 0 0 1rem;
+  }
+  .footer-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .footer-col a {
+    color: var(--color-sand);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .footer-col a:hover {
+    color: var(--color-ivory);
+  }
+
+  .footer-emergency {
+    margin-top: 3rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--color-line-dark);
+    border-left: 3px solid var(--color-clay);
+    border-radius: var(--radius-sm);
+    background: rgba(241, 232, 218, 0.04);
+    color: var(--color-sand);
+    font-size: 0.88rem;
+  }
+  .footer-emergency strong {
+    color: var(--color-ivory);
+  }
+  .footer-emergency a {
+    color: var(--color-clay);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .footer-legal {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line-dark);
+  }
+  .footer-disclaimer {
+    color: var(--color-mocha-soft);
+    font-size: 0.8rem;
+    max-width: 75ch;
+    margin: 0 0 1.2rem;
+  }
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  .footer-bottom p {
+    margin: 0;
+    color: var(--color-mocha-soft);
+    font-size: 0.78rem;
+  }
+  .footer-legal-links {
+    list-style: none;
+    display: flex;
+    gap: 1.2rem;
+    margin: 0;
+    padding: 0;
+  }
+  .footer-legal-links a {
+    color: var(--color-sand);
+    text-decoration: none;
+    font-size: 0.78rem;
+  }
+  .footer-legal-links a:hover {
+    color: var(--color-ivory);
+  }
+</style>

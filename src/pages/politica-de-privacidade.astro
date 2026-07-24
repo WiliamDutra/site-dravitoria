@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { site } from '../data/site';
+import { medicalWebPageNode, breadcrumbNode } from '../lib/schema';
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Política de Privacidade', href: '/politica-de-privacidade' },
+];
+const schemaNodes = [
+  medicalWebPageNode({
+    path: '/politica-de-privacidade',
+    name: 'Política de Privacidade',
+    description:
+      'Como tratamos seus dados conforme a LGPD. Política de privacidade do site da Dra. Vitória Gomes.',
+  }),
+  breadcrumbNode(breadcrumb, '/politica-de-privacidade'),
+];
+const atualizacao = '15 de julho de 2026';
+---
+
+<BaseLayout
+  title="Política de Privacidade | Dra. Vitória Gomes"
+  description="Como tratamos seus dados conforme a LGPD. Política de privacidade do site da Dra. Vitória Gomes."
+  schemaNodes={schemaNodes}
+>
+  <Section band="dark" class="legal-hero">
+    <Breadcrumb items={breadcrumb} class="legal-hero__crumb" />
+    <span class="eyebrow">LGPD</span>
+    <h1>Política de Privacidade</h1>
+    <p class="legal-hero__lead">
+      Sua privacidade importa, em especial quando o assunto é saúde. Aqui está,
+      com clareza, como os seus dados são tratados.
+    </p>
+  </Section>
+
+  <Section band="light">
+    <div class="legal prose">
+      <p class="legal-updated">Última atualização: {atualizacao}</p>
+
+      <h2>1. Quem é responsável pelos seus dados</h2>
+      <p>
+        Este site é de <strong>{site.nome}</strong> ({site.titulo}, {site.crm}),
+        com base em {site.base.cidade}/{site.base.uf}. Para tratar de privacidade e
+        dos seus direitos, você pode entrar em contato pelo e-mail
+        <strong>{site.canais.email}</strong> ou pelo WhatsApp informado no site.
+      </p>
+
+      <h2>2. Que dados este site coleta</h2>
+      <p>
+        Este site é informativo e <strong>não possui formulários que gravam dados
+        em servidor</strong>. O agendamento é feito diretamente pelo WhatsApp.
+        Na prática:
+      </p>
+      <ul>
+        <li>
+          <strong>Ao clicar em “Agendar / WhatsApp”:</strong> você é direcionada
+          ao WhatsApp e passa a se comunicar por lá. As mensagens trocadas ficam
+          sujeitas também à política de privacidade do WhatsApp.
+        </li>
+        <li>
+          <strong>Quiz / convite à reflexão:</strong> as respostas ficam
+          <strong>somente no seu dispositivo</strong>, para a sua própria
+          reflexão. Elas <strong>não são enviadas nem armazenadas</strong> por nós.
+        </li>
+        <li>
+          <strong>Dados de navegação:</strong> como qualquer site, o servidor de
+          hospedagem pode registrar dados técnicos básicos (como endereço IP e
+          tipo de navegador) para segurança e funcionamento.
+        </li>
+      </ul>
+
+      <h2>3. Dados sensíveis de saúde</h2>
+      <p>
+        Informações sobre a sua saúde são <strong>dados pessoais sensíveis</strong>.
+        Elas não são coletadas por este site. Quando você inicia um atendimento, os
+        dados clínicos passam a integrar o <strong>prontuário médico</strong>,
+        protegido pelo <strong>sigilo médico</strong> e tratado conforme a
+        legislação de saúde e a LGPD, com a finalidade de prestar o cuidado.
+      </p>
+
+      <h2>4. Para que usamos os dados e com que base legal</h2>
+      <ul>
+        <li>Responder ao seu contato e agendar consultas (execução de atendimento / seu consentimento).</li>
+        <li>Prestar o cuidado médico e manter o prontuário (obrigação legal e tutela da saúde).</li>
+        <li>Garantir a segurança e o funcionamento do site (legítimo interesse).</li>
+      </ul>
+
+      <h2>5. Compartilhamento</h2>
+      <p>
+        Seus dados não são vendidos. Pode haver compartilhamento estritamente
+        necessário com prestadores que viabilizam o serviço (por exemplo, a
+        plataforma de teleconsulta e o WhatsApp), sempre respeitando o sigilo e a
+        finalidade. Dados só são compartilhados com terceiros fora disso mediante
+        seu consentimento ou obrigação legal.
+      </p>
+
+      <h2>6. Cookies</h2>
+      <p>
+        Este site usa recursos externos mínimos (por exemplo, fontes do Google
+        Fonts). Caso, no futuro, sejam adicionadas ferramentas de análise ou
+        anúncios, esta política será atualizada e, quando exigido, será solicitado
+        o seu consentimento.
+      </p>
+
+      <h2>7. Os seus direitos (LGPD)</h2>
+      <p>
+        Você pode, a qualquer momento, solicitar: confirmação e acesso aos seus
+        dados; correção; anonimização, bloqueio ou eliminação; portabilidade;
+        informação sobre compartilhamentos; e revogação do consentimento. Para
+        exercer esses direitos, use os contatos do item 1. Observe que dados do
+        prontuário médico têm prazo mínimo de guarda exigido por lei.
+      </p>
+
+      <h2>8. Segurança e retenção</h2>
+      <p>
+        Adotamos medidas razoáveis para proteger as informações. Os dados são
+        mantidos apenas pelo tempo necessário às finalidades acima ou pelos prazos
+        legais aplicáveis (especialmente o prontuário médico).
+      </p>
+
+      <h2>9. Alterações</h2>
+      <p>
+        Esta política pode ser atualizada. A data no topo indica a versão vigente.
+        Recomendamos consultá-la periodicamente.
+      </p>
+
+      <p class="legal-note">
+        <strong>Nota:</strong> alguns campos (e-mail do responsável, encarregado
+        de dados e a plataforma de teleconsulta) devem ser confirmados/preenchidos
+        antes da publicação oficial do site.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .legal-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .legal-hero__lead {
+    color: var(--color-sand);
+    max-width: 56ch;
+    font-size: 1.05rem;
+  }
+  .legal {
+    max-width: 760px;
+  }
+  .legal-updated {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .legal h2 {
+    margin-top: 2.2em;
+    font-size: 1.5rem;
+  }
+  .legal-note {
+    margin-top: 2.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-cream);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+</style>

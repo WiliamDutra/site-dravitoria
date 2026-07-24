@@ -1,0 +1,48 @@
+---
+type Tone = 'clay' | 'line' | 'dark' | 'cream';
+interface Props {
+  tone?: Tone;
+  class?: string;
+}
+const { tone = 'clay', class: className = '' } = Astro.props;
+---
+
+<span class:list={['badge', `badge--${tone}`, className]}>
+  <slot />
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-pill);
+    line-height: 1;
+  }
+  .badge--clay {
+    background: color-mix(in srgb, var(--color-clay) 22%, transparent);
+    color: var(--color-espresso);
+    border: 1px solid color-mix(in srgb, var(--color-clay) 55%, transparent);
+  }
+  .badge--line {
+    background: transparent;
+    color: var(--color-muted);
+    border: 1px solid var(--color-line);
+  }
+  .badge--dark {
+    background: color-mix(in srgb, var(--color-ivory) 12%, transparent);
+    color: var(--color-ivory);
+    border: 1px solid color-mix(in srgb, var(--color-ivory) 25%, transparent);
+  }
+  .badge--cream {
+    background: var(--color-cream);
+    color: var(--color-espresso);
+    border: 1px solid var(--color-line);
+  }
+</style>

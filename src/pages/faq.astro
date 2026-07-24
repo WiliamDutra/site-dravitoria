@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import CTASection from '../components/CTASection.astro';
+import CFMDisclaimer from '../components/CFMDisclaimer.astro';
+import { faqGeral } from '../data/faqGeral';
+import { medicalWebPageNode, faqPageNode, breadcrumbNode } from '../lib/schema';
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Perguntas frequentes', href: '/faq' },
+];
+const schemaNodes = [
+  medicalWebPageNode({
+    path: '/faq',
+    name: 'Perguntas frequentes',
+    description:
+      'Tire suas dúvidas sobre a consulta de psiquiatria online, como funciona, sigilo e acompanhamento.',
+  }),
+  faqPageNode(faqGeral, '/faq'),
+  breadcrumbNode(breadcrumb, '/faq'),
+];
+---
+
+<BaseLayout
+  title="Perguntas Frequentes | Dra. Vitória Gomes"
+  description="Tire suas dúvidas sobre a consulta de psiquiatria online, como funciona, sigilo e acompanhamento."
+  schemaNodes={schemaNodes}
+>
+  <Section band="dark" class="faq-hero">
+    <Breadcrumb items={breadcrumb} class="faq-hero__crumb" />
+    <span class="eyebrow">Dúvidas</span>
+    <h1>Perguntas frequentes</h1>
+    <p class="faq-hero__lead">
+      As dúvidas mais comuns sobre a consulta online, o sigilo, a receita e a
+      primeira consulta, respondidas com transparência.
+    </p>
+  </Section>
+
+  <Section band="light">
+    <div class="faq-wrap">
+      <FAQAccordion items={faqGeral} />
+      <CFMDisclaimer />
+    </div>
+  </Section>
+
+  <CTASection
+    heading="Ainda com dúvida? A gente conversa"
+    body="Toda dúvida é bem-vinda. Chame no WhatsApp e eu te explico com calma o que você precisar."
+    anchorPhrase="Acolher não é prometer cura. É caminhar junto, com verdade e com ciência."
+  />
+</BaseLayout>
+
+<style>
+  .faq-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .faq-hero__lead {
+    color: var(--color-sand);
+    max-width: 56ch;
+    font-size: 1.1rem;
+  }
+  .faq-wrap {
+    max-width: 820px;
+  }
+</style>

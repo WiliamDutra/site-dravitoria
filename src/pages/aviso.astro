@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import EmergencyBanner from '../components/EmergencyBanner.astro';
+import TrustBadge from '../components/TrustBadge.astro';
+import { site } from '../data/site';
+import { medicalWebPageNode, breadcrumbNode } from '../lib/schema';
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Aviso e Sigilo', href: '/aviso' },
+];
+const schemaNodes = [
+  medicalWebPageNode({
+    path: '/aviso',
+    name: 'Sigilo, ética e atendimento',
+    description:
+      'Informações sobre sigilo médico, limites do conteúdo online e canais de emergência em saúde mental (CVV 188).',
+  }),
+  breadcrumbNode(breadcrumb, '/aviso'),
+];
+---
+
+<BaseLayout
+  title="Aviso e Sigilo | Dra. Vitória Gomes"
+  description="Informações sobre sigilo médico, limites do conteúdo online e canais de emergência em saúde mental (CVV 188)."
+  schemaNodes={schemaNodes}
+>
+  <Section band="dark" class="aviso-hero">
+    <Breadcrumb items={breadcrumb} class="aviso-hero__crumb" />
+    <span class="eyebrow">Ética e sigilo</span>
+    <h1>Sigilo, ética e atendimento</h1>
+    <p class="aviso-hero__lead">
+      Transparência é parte do cuidado. Aqui estão os limites do que este site faz,
+      o compromisso com o sigilo e onde buscar ajuda em uma emergência.
+    </p>
+    <TrustBadge class="aviso-hero__badge" />
+  </Section>
+
+  <Section band="light">
+    <div class="aviso prose">
+      <h2>O conteúdo deste site é educativo</h2>
+      <p>
+        {site.disclaimers.conteudoEducativo} As informações aqui servem para
+        acolher e esclarecer, para que você entenda melhor o que sente e saiba
+        quando buscar ajuda. Elas não configuram consulta, diagnóstico ou
+        prescrição individuais.
+      </p>
+
+      <h2>Não há diagnóstico ou receita por mensagem</h2>
+      <p>
+        {site.disclaimers.semDiagnostico} Por isso, não realizo diagnósticos,
+        ajustes de medicação ou prescrições por rede social, DM ou WhatsApp. Esses
+        cuidados acontecem dentro da consulta, com a avaliação devida.
+      </p>
+
+      <h2>Integrativa não é anti-remédio</h2>
+      <p>
+        {site.disclaimers.integrativaSoma} Nunca oriento ninguém a começar ou
+        interromper medicação por conta própria, qualquer decisão sobre remédios é
+        tomada na consulta, com acompanhamento.
+      </p>
+
+      <h2>Sigilo médico</h2>
+      <p>
+        {site.disclaimers.sigilo} {site.disclaimers.telemedicina} A consulta online
+        tem o mesmo sigilo e a mesma seriedade do atendimento presencial. Escolha um
+        lugar reservado para a nossa conversa.
+      </p>
+
+      <h2>Sobre a médica</h2>
+      <p>
+        {site.identificacaoMedica}. Graduação em Medicina pela Universidade Federal
+        do Cariri (UFCA/CE), com pós-graduação em Psiquiatria em andamento e
+        dedicação à Medicina do Estilo de Vida e ao cuidado integrativo. Registro
+        profissional e informações de contato estão sempre visíveis no site.
+      </p>
+
+      <h2 class="aviso-emergencia-title">Em caso de emergência</h2>
+      <p>{site.disclaimers.emergencia}</p>
+    </div>
+
+    <EmergencyBanner class="aviso-banner" />
+
+    <div class="aviso-help prose">
+      <p>
+        Se a crise é de outra pessoa e você quer ajudar, fique por perto, ouça sem
+        julgar e ajude a acionar esses canais. Em situação de risco imediato à
+        vida, procure a emergência mais próxima ou ligue para o SAMU
+        {site.emergencia.samu}.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .aviso-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .aviso-hero__lead {
+    color: var(--color-sand);
+    max-width: 58ch;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+  .aviso-hero__badge {
+    color: var(--color-sand) !important;
+  }
+  .aviso {
+    max-width: 760px;
+  }
+  .aviso h2 {
+    margin-top: 2.2em;
+    font-size: 1.5rem;
+  }
+  .aviso-emergencia-title {
+    color: var(--color-primary);
+  }
+  .aviso-banner {
+    margin: 2rem 0;
+    max-width: 760px;
+  }
+  .aviso-help {
+    max-width: 760px;
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import Section from './ui/Section.astro';
+import WhatsAppCTA from './WhatsAppCTA.astro';
+import { mensagemAgendamento } from '../data/site';
+
+interface Props {
+  heading: string;
+  body?: string;
+  anchorPhrase?: string; // itálico Cormorant
+  message?: string; // mensagem do WhatsApp
+  label?: string;
+  band?: 'mid' | 'coffee' | 'dark';
+}
+const {
+  heading,
+  body,
+  anchorPhrase,
+  message = mensagemAgendamento,
+  label = 'Agende sua consulta',
+  band = 'mid',
+} = Astro.props;
+---
+
+<Section band={band} class="cta-section">
+  <div class="cta-inner">
+    {anchorPhrase && <p class="cta-anchor">{anchorPhrase}</p>}
+    <h2 class="cta-heading">{heading}</h2>
+    {body && <p class="cta-body">{body}</p>}
+    <div class="cta-actions">
+      <WhatsAppCTA message={message} label={label} variant="outline-light" />
+    </div>
+    <p class="cta-note">
+      O agendamento é feito com carinho pelo WhatsApp. Convite ao cuidado, sem
+      compromisso e sem pressa.
+    </p>
+  </div>
+</Section>
+
+<style>
+  .cta-inner {
+    max-width: 680px;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .cta-anchor {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+    color: var(--color-sand);
+    margin: 0 0 1rem;
+    max-width: none;
+  }
+  .cta-heading {
+    font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+    margin: 0 0 1rem;
+  }
+  .cta-body {
+    font-size: 1.05rem;
+    color: var(--color-ivory);
+    margin: 0 auto 1.8rem;
+    max-width: 52ch;
+  }
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .cta-note {
+    margin: 1.4rem auto 0;
+    font-size: 0.8rem;
+    color: var(--color-sand);
+    max-width: 44ch;
+  }
+</style>

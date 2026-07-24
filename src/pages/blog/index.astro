@@ -1,0 +1,164 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import CTASection from '../../components/CTASection.astro';
+import { medicalWebPageNode, breadcrumbNode } from '../../lib/schema';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+// Agrupa por cluster
+const clusters = [...new Set(posts.map((p) => p.data.cluster))];
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Blog', href: '/blog' },
+];
+const schemaNodes = [
+  medicalWebPageNode({
+    path: '/blog',
+    name: 'Blog da Dra. Vitória Gomes',
+    description:
+      'Conteúdo sobre saúde mental, ansiedade, depressão e psiquiatria integrativa, na voz da Dra. Vitória Gomes.',
+  }),
+  breadcrumbNode(breadcrumb, '/blog'),
+];
+---
+
+<BaseLayout
+  title="Blog | Dra. Vitória Gomes, Saúde Mental"
+  description="Conteúdo sobre saúde mental, ansiedade, depressão e psiquiatria integrativa, na voz da Dra. Vitória Gomes."
+  schemaNodes={schemaNodes}
+>
+  <Section band="dark" class="blog-hero">
+    <Breadcrumb items={breadcrumb} class="blog-hero__crumb" />
+    <span class="eyebrow">Conteúdo</span>
+    <h1>Blog da Dra. Vitória Gomes</h1>
+    <p class="blog-hero__lead">
+      Saúde mental explicada com calma e sem jargão, na voz de quem acredita que
+      cuidar da mente é cuidar da pessoa inteira.
+    </p>
+  </Section>
+
+  <Section band="light">
+    {
+      clusters.map((cluster) => (
+        <div class="blog-cluster">
+          <h2 class="blog-cluster__title">
+            <span class="eyebrow">Cluster</span>
+            {cluster}
+          </h2>
+          <div class="blog-grid">
+            {posts
+              .filter((p) => p.data.cluster === cluster)
+              .map((p) => (
+                <a href={`/blog/${p.id}`} class="blog-card">
+                  <h3>{p.data.title}</h3>
+                  <p>{p.data.excerpt}</p>
+                  <span class="blog-card__more">
+                    Ler o artigo <span aria-hidden="true">→</span>
+                  </span>
+                </a>
+              ))}
+          </div>
+        </div>
+      ))
+    }
+
+    <div class="blog-seasonal">
+      <p class="eyebrow">Em breve</p>
+      <p>
+        Campanhas sazonais como <strong>Setembro Amarelo</strong> (prevenção ao
+        suicídio) e <strong>Janeiro Branco</strong> (mês da saúde mental) ganham
+        conteúdo próprio aqui, no momento certo do ano.
+      </p>
+    </div>
+  </Section>
+
+  <CTASection
+    heading="Do conteúdo ao cuidado"
+    body="Se algum texto tocou em algo seu, o próximo passo pode ser uma conversa. A consulta é online, de onde você estiver."
+    anchorPhrase="Cuidar de você não é luxo nem fraqueza. É o começo de tudo."
+  />
+</BaseLayout>
+
+<style>
+  .blog-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .blog-hero__lead {
+    color: var(--color-sand);
+    max-width: 56ch;
+    font-size: 1.1rem;
+  }
+  .blog-cluster {
+    margin-bottom: 3rem;
+  }
+  .blog-cluster__title {
+    margin-bottom: 1.5rem;
+  }
+  .blog-cluster__title .eyebrow {
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .blog-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 700px) {
+    .blog-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--color-espresso);
+    box-shadow: var(--shadow-card);
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .blog-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+  }
+  .blog-card h3 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+  .blog-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    flex-grow: 1;
+  }
+  .blog-card__more {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  .blog-seasonal {
+    margin-top: 1rem;
+    padding: 1.5rem;
+    border: 1px dashed var(--color-line);
+    border-radius: var(--radius-md);
+    max-width: 62ch;
+  }
+  .blog-seasonal p:last-child {
+    margin: 0;
+    color: var(--text-muted);
+  }
+</style>

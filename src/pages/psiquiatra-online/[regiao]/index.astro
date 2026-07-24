@@ -1,0 +1,313 @@
+---
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
+import Section from '../../../components/ui/Section.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
+import TrustBadge from '../../../components/TrustBadge.astro';
+import WhatsAppCTA from '../../../components/WhatsAppCTA.astro';
+import FAQAccordion from '../../../components/FAQAccordion.astro';
+import RegionReach from '../../../components/RegionReach.astro';
+import RelatedContent from '../../../components/RelatedContent.astro';
+import CTASection from '../../../components/CTASection.astro';
+import CFMDisclaimer from '../../../components/CFMDisclaimer.astro';
+import { regioes, getRegiao } from '../../../data/regioes';
+import { combosDaRegiao } from '../../../data/combinacoes';
+import { getCondition } from '../../../data/conditions';
+import {
+  medicalWebPageNode,
+  faqPageNode,
+  breadcrumbNode,
+} from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return regioes.map((r) => ({ params: { regiao: r.slug } }));
+}
+
+const { regiao: slug } = Astro.params;
+const r = getRegiao(slug!)!;
+const path = `/psiquiatra-online/${r.slug}`;
+
+const combos = combosDaRegiao(r.slug);
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Psiquiatra Online', href: '/psiquiatra-online' },
+  { name: r.name, href: path },
+];
+
+const schemaNodes = [
+  medicalWebPageNode({ path, name: r.heroHeading, description: r.metaDescription }),
+  faqPageNode(r.faqs, path),
+  breadcrumbNode(breadcrumb, path),
+];
+
+const ctaMessage = `Olá, Dra. Vitória! Vim pela página de atendimento ${r.displayName} e gostaria de marcar uma consulta online. 🤍`;
+
+const related = [
+  { label: 'Ansiedade', href: '/ansiedade' },
+  { label: 'Depressão', href: '/depressao' },
+  { label: 'Esgotamento e burnout', href: '/esgotamento' },
+  { label: 'O que é psiquiatria integrativa', href: '/psiquiatria-integrativa' },
+];
+---
+
+<BaseLayout
+  title={r.metaTitle}
+  description={r.metaDescription}
+  schemaNodes={schemaNodes}
+>
+  <!-- HERO -->
+  <Section band="dark" class="geo-hero">
+    <Breadcrumb items={breadcrumb} class="geo-hero__crumb" />
+    <span class="eyebrow">{r.heroKicker}</span>
+    <h1 class="geo-hero__h1">{r.heroHeading}</h1>
+    <div class="geo-hero__actions">
+      <WhatsAppCTA message={ctaMessage} variant="outline-light" />
+      <a href="/psiquiatra-online" class="geo-hero__link">Como funciona a consulta online →</a>
+    </div>
+    <TrustBadge class="geo-hero__badge" />
+  </Section>
+
+  <!-- INTRO -->
+  <Section band="light">
+    <div class="prose geo-intro">
+      {r.uniqueIntro.map((p) => <p class="lead">{p}</p>)}
+    </div>
+  </Section>
+
+  <!-- CONTEXTO REGIONAL (dado real) -->
+  <Section band="ivory" tight>
+    <span class="eyebrow">A realidade da sua região</span>
+    <h2>Por que o atendimento online muda o jogo {r.displayName}</h2>
+    <div class="ctx-grid">
+      {
+        r.regionalContext.map((ctx) => (
+          <div class="ctx-card">
+            <h3>{ctx.title}</h3>
+            <p>{ctx.body}</p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="ctx-source">
+      Dados de mercado (concentração e escassez de psiquiatras, avanço da
+      teleconsulta) com base em pesquisa pública do setor. Nenhuma estatística é
+      inventada.
+    </p>
+  </Section>
+
+  <!-- ALCANCE / MAPA -->
+  <Section band="light">
+    <RegionReach
+      hasPhysicalPresence={r.hasPhysicalPresence}
+      mapQuery={r.mapQuery}
+      mapHeading={r.mapHeading}
+      regionName={r.displayName}
+    />
+    <p class="reach-insight">{r.telemedicineReach}</p>
+    <p class="reach-local">{r.localInsight}</p>
+  </Section>
+
+  <!-- COMBOS PERMITIDOS (se houver) -->
+  {
+    combos.length > 0 && (
+      <Section band="mid" tight>
+        <span class="eyebrow">Cuidado específico {r.displayName}</span>
+        <h2>Condições que eu atendo {r.displayName}</h2>
+        <p class="lead" style="color: var(--color-ivory); max-width: 56ch;">
+          Veja como o cuidado de cada uma se conecta com a realidade da sua região:
+        </p>
+        <div class="combo-grid">
+          {combos.map((combo) => {
+            const cond = getCondition(combo.conditionSlug);
+            return (
+              <a
+                href={`/psiquiatra-online/${r.slug}/${combo.conditionSlug}`}
+                class="combo-card"
+              >
+                <h3>{cond?.name ?? combo.conditionSlug}</h3>
+                <p>{combo.localNote}</p>
+                <span class="combo-card__more">Ver página →</span>
+              </a>
+            );
+          })}
+        </div>
+      </Section>
+    )
+  }
+
+  <!-- Testimonial (só se consentido) -->
+  {
+    r.testimonial?.consentido && (
+      <Section band="light" tight>
+        <figure class="geo-testimonial">
+          <blockquote>“{r.testimonial.text}”</blockquote>
+          <figcaption>— {r.testimonial.author}</figcaption>
+        </figure>
+      </Section>
+    )
+  }
+
+  <!-- FAQ -->
+  <Section band="ivory">
+    <FAQAccordion
+      items={r.faqs}
+      title={`Dúvidas sobre atender ${r.displayName} por telemedicina`}
+    />
+  </Section>
+
+  <!-- RELACIONADOS + DISCLAIMER -->
+  <Section band="light" tight>
+    <RelatedContent
+      title="Conteúdos relacionados"
+      items={related}
+    />
+    <CFMDisclaimer />
+  </Section>
+
+  <!-- CTA -->
+  <CTASection
+    heading={`Onde você estiver ${r.displayName}, dá pra começar a se cuidar`}
+    body="A primeira consulta é uma conversa, online, de onde você estiver. Vamos quando você sentir que é a hora."
+    anchorPhrase="Você não precisa atravessar isso sozinha."
+    message={ctaMessage}
+  />
+</BaseLayout>
+
+<style>
+  .geo-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .geo-hero__h1 {
+    max-width: 24ch;
+  }
+  .geo-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .geo-hero__link {
+    color: var(--color-ivory);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--color-clay);
+    padding-bottom: 2px;
+  }
+  .geo-hero__badge {
+    margin-top: 2rem;
+    color: var(--color-sand) !important;
+  }
+
+  .geo-intro {
+    max-width: 760px;
+  }
+
+  .ctx-grid {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .ctx-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .ctx-card {
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+  }
+  .ctx-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+  }
+  .ctx-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+  .ctx-source {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    max-width: 60ch;
+  }
+
+  .reach-insight {
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    max-width: 62ch;
+  }
+  .reach-local {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--color-mocha);
+    border-left: 3px solid var(--color-clay);
+    padding-left: 1.25rem;
+    max-width: 60ch;
+  }
+
+  .combo-grid {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .combo-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .combo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--color-coffee);
+    color: var(--color-ivory);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+  .combo-card:hover {
+    transform: translateY(-3px);
+  }
+  .combo-card h3 {
+    margin: 0;
+    color: var(--color-ivory);
+  }
+  .combo-card p {
+    margin: 0;
+    color: var(--color-sand);
+    font-size: 0.9rem;
+    flex-grow: 1;
+  }
+  .combo-card__more {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-clay);
+  }
+
+  .geo-testimonial {
+    margin: 0;
+    max-width: 640px;
+  }
+  .geo-testimonial blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    line-height: 1.4;
+    margin: 0 0 0.75rem;
+    color: var(--color-coffee);
+  }
+  .geo-testimonial figcaption {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+</style>

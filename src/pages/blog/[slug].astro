@@ -1,0 +1,132 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import EmergencyBanner from '../../components/EmergencyBanner.astro';
+import RelatedContent from '../../components/RelatedContent.astro';
+import CTASection from '../../components/CTASection.astro';
+import CFMDisclaimer from '../../components/CFMDisclaimer.astro';
+import TrustBadge from '../../components/TrustBadge.astro';
+import {
+  blogPostingNode,
+  breadcrumbNode,
+} from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const path = `/blog/${post.id}`;
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Blog', href: '/blog' },
+  { name: d.title, href: path },
+];
+
+const related = [
+  ...(d.relatedCondition
+    ? [
+        {
+          label: d.relatedLabel ?? 'Saiba mais',
+          href: `/${d.relatedCondition}`,
+        },
+      ]
+    : []),
+  { label: 'Agende sua consulta online', href: '/agendar' },
+  { label: 'Perguntas frequentes', href: '/faq' },
+];
+
+const schemaNodes = [
+  blogPostingNode({
+    path,
+    headline: d.h1,
+    description: d.metaDescription,
+    datePublished: d.datePublished,
+    dateModified: d.dateModified,
+  }),
+  breadcrumbNode(breadcrumb, path),
+];
+---
+
+<BaseLayout
+  title={d.metaTitle}
+  description={d.metaDescription}
+  ogType="article"
+  schemaNodes={schemaNodes}
+>
+  <Section band="dark" class="post-hero">
+    <Breadcrumb items={breadcrumb} class="post-hero__crumb" />
+    <span class="eyebrow">{d.cluster}</span>
+    <h1>{d.h1}</h1>
+    {d.anchorPhrase && <p class="post-hero__anchor anchor-phrase">“{d.anchorPhrase}”</p>}
+    <TrustBadge class="post-hero__badge" />
+  </Section>
+
+  <Section band="light">
+    <article class="prose post-body">
+      <Content />
+    </article>
+  </Section>
+
+  {
+    d.emergencyNote && (
+      <Section band="ivory" tight>
+        <EmergencyBanner />
+      </Section>
+    )
+  }
+
+  <Section band="light" tight>
+    <RelatedContent items={related} />
+    <CFMDisclaimer />
+  </Section>
+
+  <CTASection
+    heading="Se isso tocou em algo seu, vamos conversar"
+    body="Um convite ao cuidado, com calma e com companhia. A consulta é online, de onde você estiver."
+    anchorPhrase={d.anchorPhrase ?? 'Você não precisa atravessar isso sozinha.'}
+  />
+</BaseLayout>
+
+<style>
+  .post-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .post-hero h1 {
+    max-width: 22ch;
+  }
+  .post-hero__anchor {
+    color: var(--color-clay);
+    font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+    max-width: 30ch;
+    margin: 1rem 0 1.5rem;
+  }
+  .post-hero__badge {
+    color: var(--color-sand) !important;
+  }
+  .post-body {
+    max-width: 720px;
+  }
+  .post-body :global(h2) {
+    margin-top: 2em;
+    font-size: 1.6rem;
+  }
+  .post-body :global(blockquote) {
+    margin: 1.5rem 0;
+    padding: 1.1rem 1.4rem;
+    border-left: 3px solid var(--color-primary);
+    background: var(--color-cream);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-style: italic;
+    color: var(--color-coffee);
+  }
+  .post-body :global(ul) {
+    padding-left: 1.3rem;
+  }
+</style>

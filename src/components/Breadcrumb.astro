@@ -1,0 +1,70 @@
+---
+// Breadcrumb visual. O schema BreadcrumbList é emitido no nível da página
+// (via lib/schema → breadcrumbNode) usando a MESMA lista de items, 1:1.
+export interface Crumb {
+  name: string;
+  href: string;
+}
+interface Props {
+  items: Crumb[];
+  class?: string;
+}
+const { items, class: className = '' } = Astro.props;
+---
+
+<nav class:list={['breadcrumb', className]} aria-label="Você está aqui">
+  <ol>
+    {
+      items.map((item, i) => (
+        <li>
+          {i < items.length - 1 ? (
+            <a href={item.href}>{item.name}</a>
+          ) : (
+            <span aria-current="page">{item.name}</span>
+          )}
+          {i < items.length - 1 && (
+            <span class="breadcrumb__sep" aria-hidden="true">
+              /
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .breadcrumb li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+  .breadcrumb [aria-current='page'] {
+    color: var(--color-espresso);
+  }
+  .band-dark .breadcrumb [aria-current='page'],
+  .band-mid .breadcrumb [aria-current='page'] {
+    color: var(--color-ivory);
+  }
+  .breadcrumb__sep {
+    opacity: 0.5;
+  }
+</style>

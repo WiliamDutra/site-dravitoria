@@ -1,0 +1,134 @@
+---
+import ConditionPage from '../layouts/ConditionPage.astro';
+import Section from '../components/ui/Section.astro';
+import { getCondition } from '../data/conditions';
+import { regioes } from '../data/regioes';
+
+const condition = getCondition('psiquiatra-online')!;
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Psiquiatra Online', href: '/psiquiatra-online' },
+];
+---
+
+<ConditionPage condition={condition} breadcrumb={breadcrumb}>
+  <!-- Imagem ambiental: teleconsulta -->
+  <Section band="ivory" tight>
+    <figure class="tele-figure">
+      <img
+        src="/images/teleconsulta/ambiente.webp"
+        width="1536"
+        height="1024"
+        alt="Um laptop com uma videochamada de consulta, num ambiente acolhedor de luz quente, com planta e uma xícara ao lado"
+        loading="lazy"
+      />
+      <figcaption>
+        A consulta acontece de onde você estiver, num cantinho seu, com o mesmo
+        cuidado e sigilo do presencial.
+      </figcaption>
+    </figure>
+  </Section>
+
+  <!-- Seção extra: hub geo (Atendo também em…) -->
+  <Section band="light">
+    <span class="eyebrow">Alcance nacional</span>
+    <h2>Atendo você onde você estiver no Brasil</h2>
+    <p class="lead" style="max-width: 62ch;">
+      A telemedicina dissolve a distância. Veja como o cuidado chega até algumas
+      das regiões que atendo, do Ceará, onde eu moro, às grandes praças do país:
+    </p>
+    <div class="geo-grid">
+      {
+        regioes.map((r) => (
+          <a href={`/psiquiatra-online/${r.slug}`} class="geo-card">
+            <span class="geo-card__uf">{r.uf}</span>
+            <span class="geo-card__name">{r.name}</span>
+            <span class="geo-card__tag">
+              {r.hasPhysicalPresence ? 'Vínculo local + online' : 'Atendimento online'}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+    <p class="geo-note">
+      Não vê a sua região aqui? Sem problema, o atendimento é online para
+      <strong>todo o Brasil</strong>. Estas páginas são só um recorte com
+      contexto local.
+    </p>
+  </Section>
+</ConditionPage>
+
+<style>
+  .tele-figure {
+    margin: 0;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+  .tele-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+  }
+  .tele-figure figcaption {
+    margin-top: 0.9rem;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    color: var(--color-mocha);
+    max-width: 52ch;
+    margin-inline: auto;
+  }
+  .geo-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (min-width: 768px) {
+    .geo-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .geo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--color-espresso);
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .geo-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-clay);
+  }
+  .geo-card__uf {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--color-clay);
+  }
+  .geo-card__name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .geo-card__tag {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .geo-note {
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    max-width: 60ch;
+  }
+</style>

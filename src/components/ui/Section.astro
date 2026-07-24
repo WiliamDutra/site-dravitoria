@@ -1,0 +1,42 @@
+---
+import Container from './Container.astro';
+
+type Band = 'dark' | 'coffee' | 'mid' | 'light' | 'ivory' | 'none';
+
+interface Props {
+  band?: Band;
+  tight?: boolean;
+  narrow?: boolean;
+  id?: string;
+  class?: string;
+  containerClass?: string;
+  full?: boolean; // não envolve em Container (para heros/faixas custom)
+}
+
+const {
+  band = 'none',
+  tight = false,
+  narrow = false,
+  id,
+  class: className = '',
+  containerClass = '',
+  full = false,
+} = Astro.props;
+
+const bandClass = band === 'none' ? '' : `band-${band}`;
+---
+
+<section
+  id={id}
+  class:list={['section', tight && 'section--tight', bandClass, className]}
+>
+  {
+    full ? (
+      <slot />
+    ) : (
+      <Container narrow={narrow} class={containerClass}>
+        <slot />
+      </Container>
+    )
+  }
+</section>

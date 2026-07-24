@@ -1,0 +1,71 @@
+---
+// Só renderiza depoimentos REAIS consentidos (régua CFM). Se não houver nenhum,
+// o componente não renderiza nada — evita depoimento fictício.
+import { testimonialsPublicaveis } from '../data/testimonials';
+
+const itens = testimonialsPublicaveis;
+const temItens = itens.length > 0;
+---
+
+{
+  temItens && (
+    <div class="tslider" data-count={itens.length}>
+      <div class="tslider__track">
+        {itens.map((t) => (
+          <figure class="tslider__card">
+            <blockquote class="tslider__text">“{t.text}”</blockquote>
+            <figcaption class="tslider__author">
+              — {t.author}
+              {t.context ? <span class="tslider__ctx"> · {t.context}</span> : null}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="tslider__note">
+        Relatos reais, anônimos e compartilhados com consentimento.
+      </p>
+    </div>
+  )
+}
+
+<style>
+  .tslider__track {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .tslider__track {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+  }
+  .tslider__card {
+    background: var(--color-clay);
+    color: var(--color-espresso);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 1.6rem;
+    margin: 0;
+  }
+  .tslider__text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin: 0 0 1rem;
+  }
+  .tslider__author {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .tslider__ctx {
+    color: var(--color-coffee);
+    font-weight: 400;
+  }
+  .tslider__note {
+    margin-top: 1.25rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+</style>

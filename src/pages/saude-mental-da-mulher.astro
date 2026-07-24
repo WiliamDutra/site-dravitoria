@@ -1,0 +1,13 @@
+---
+import ConditionPage from '../layouts/ConditionPage.astro';
+import { getCondition } from '../data/conditions';
+
+const condition = getCondition('saude-mental-da-mulher')!;
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Psiquiatria Integrativa', href: '/psiquiatria-integrativa' },
+  { name: condition.name, href: '/saude-mental-da-mulher' },
+];
+---
+
+<ConditionPage condition={condition} breadcrumb={breadcrumb} />

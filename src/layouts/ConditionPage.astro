@@ -1,0 +1,338 @@
+---
+import type { Condition } from '../data/conditions';
+import type { Crumb } from '../components/Breadcrumb.astro';
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import TrustBadge from '../components/TrustBadge.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import EmergencyBanner from '../components/EmergencyBanner.astro';
+import RelatedContent from '../components/RelatedContent.astro';
+import CTASection from '../components/CTASection.astro';
+import CFMDisclaimer from '../components/CFMDisclaimer.astro';
+import {
+  medicalWebPageNode,
+  faqPageNode,
+  breadcrumbNode,
+} from '../lib/schema';
+
+interface Props {
+  condition: Condition;
+  breadcrumb: Crumb[];
+}
+const { condition: c, breadcrumb } = Astro.props;
+const path = `/${c.slug}`;
+
+const schemaNodes = [
+  medicalWebPageNode({
+    path,
+    name: c.h1,
+    description: c.metaDescription,
+  }),
+  faqPageNode(c.faqs, path),
+  breadcrumbNode(breadcrumb, path),
+];
+
+const ctaMessage = `Olá, Dra. Vitória! Vim pela página de ${c.name} no site e gostaria de marcar uma consulta online. 🤍`;
+---
+
+<BaseLayout
+  title={c.metaTitle}
+  description={c.metaDescription}
+  schemaNodes={schemaNodes}
+>
+  <!-- HERO -->
+  <Section band="dark" class="cond-hero">
+    <Breadcrumb items={breadcrumb} class="cond-hero__crumb" />
+    <span class="eyebrow">{c.heroKicker}</span>
+    <h1 class="cond-hero__h1">{c.h1}</h1>
+    <p class="cond-hero__lead anchor-phrase">{c.heroHeading}</p>
+    <div class="cond-hero__actions">
+      <WhatsAppCTA message={ctaMessage} variant="outline-light" />
+      <a href="/psiquiatra-online" class="cond-hero__link">Como funciona a consulta online →</a>
+    </div>
+    <TrustBadge class="cond-hero__badge" />
+  </Section>
+
+  <!-- INTRO (voz dela) -->
+  <Section band="light">
+    <div class="cond-grid">
+      <div class="prose cond-intro">
+        {c.uniqueIntro.map((p) => <p>{p}</p>)}
+        {
+          c.storySnippet && (
+            <blockquote class="cond-story">{c.storySnippet}</blockquote>
+          )
+        }
+      </div>
+      <aside class="cond-aside">
+        <p class="cond-anchor">“{c.anchorPhrase}”</p>
+      </aside>
+    </div>
+  </Section>
+
+  <!-- SINTOMAS -->
+  {
+    c.symptoms && (
+      <Section band="ivory" tight>
+        <h2>{c.symptoms.title}</h2>
+        {c.symptoms.intro && <p class="lead">{c.symptoms.intro}</p>}
+        <ul class="check-list">
+          {c.symptoms.items.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  <!-- SUBTIPOS -->
+  {
+    c.subtypes && (
+      <Section band="light" tight>
+        <h2>{c.subtypes.title}</h2>
+        {c.subtypes.intro && <p class="lead">{c.subtypes.intro}</p>}
+        <div class="subtype-grid">
+          {c.subtypes.items.map((s) => (
+            <div class="subtype-card">
+              <h3>{s.name}</h3>
+              <p>{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+
+  <!-- COMO O CUIDADO FUNCIONA -->
+  <Section band="mid">
+    <h2>{c.howCareWorks.title}</h2>
+    {c.howCareWorks.intro && <p class="lead">{c.howCareWorks.intro}</p>}
+    <ol class="steps">
+      {
+        c.howCareWorks.steps.map((step, i) => (
+          <li class="step">
+            <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+
+  <!-- QUANDO BUSCAR AJUDA + EMERGÊNCIA -->
+  {
+    (c.whenToSeekHelp || c.emergencyNote) && (
+      <Section band="light" tight>
+        {c.whenToSeekHelp && (
+          <div class="prose cond-help">
+            <h2>{c.whenToSeekHelp.title}</h2>
+            <p>{c.whenToSeekHelp.body}</p>
+            {c.whenToSeekHelp.items && (
+              <ul class="check-list check-list--warn">
+                {c.whenToSeekHelp.items.map((it) => (
+                  <li>{it}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+        {c.emergencyNote && <EmergencyBanner class="cond-emergency" />}
+      </Section>
+    )
+  }
+
+  <!-- Slot para seções extras (pilares aprofundam aqui) -->
+  <slot />
+
+  <!-- FAQ -->
+  <Section band="ivory">
+    <FAQAccordion items={c.faqs} title={`Perguntas sobre ${c.name.toLowerCase()}`} />
+  </Section>
+
+  <!-- RELACIONADOS + DISCLAIMER -->
+  <Section band="light" tight>
+    <RelatedContent items={c.relatedContent} />
+    <CFMDisclaimer text={c.cfmDisclaimer} />
+  </Section>
+
+  <!-- CTA -->
+  <CTASection
+    heading={c.ctaHeading}
+    body={c.ctaBody}
+    anchorPhrase={c.anchorPhrase}
+    message={ctaMessage}
+  />
+</BaseLayout>
+
+<style>
+  .cond-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .cond-hero__h1 {
+    max-width: 20ch;
+  }
+  .cond-hero__lead {
+    color: var(--color-sand);
+    font-size: clamp(1.4rem, 3vw, 2.1rem);
+    max-width: 24ch;
+    margin: 1rem 0 1.75rem;
+  }
+  .cond-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .cond-hero__link {
+    color: var(--color-ivory);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--color-clay);
+    padding-bottom: 2px;
+  }
+  .cond-hero__badge {
+    margin-top: 2rem;
+    color: var(--color-sand) !important;
+  }
+
+  .cond-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 900px) {
+    .cond-grid {
+      grid-template-columns: 1.7fr 1fr;
+      align-items: start;
+    }
+  }
+  .cond-intro p {
+    font-size: 1.05rem;
+  }
+  .cond-story {
+    margin: 1.5rem 0 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 3px solid var(--color-clay);
+    background: var(--color-ivory);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-style: italic;
+    color: var(--color-coffee);
+  }
+  .cond-aside {
+    position: sticky;
+    top: 100px;
+  }
+  .cond-anchor {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    line-height: 1.3;
+    color: var(--color-mocha);
+    border-top: 2px solid var(--color-clay);
+    padding-top: 1.25rem;
+    margin: 0;
+  }
+
+  .check-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 0.7rem;
+    max-width: 60ch;
+  }
+  @media (min-width: 700px) {
+    .check-list {
+      grid-template-columns: 1fr 1fr;
+      max-width: none;
+    }
+  }
+  .check-list li {
+    position: relative;
+    padding-left: 1.7rem;
+    line-height: 1.5;
+  }
+  .check-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    color: var(--color-clay);
+  }
+  .check-list--warn li::before {
+    content: '•';
+    color: var(--color-primary);
+    font-size: 1.3em;
+    top: -0.1em;
+  }
+
+  .subtype-grid {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 700px) {
+    .subtype-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .subtype-card {
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+  }
+  .subtype-card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.25rem;
+  }
+  .subtype-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    max-width: 65ch;
+  }
+  .step__num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    color: var(--color-clay);
+    font-weight: 600;
+    flex-shrink: 0;
+    line-height: 1;
+    padding-top: 0.15rem;
+  }
+  .step h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.3rem;
+  }
+  .step p {
+    margin: 0;
+    color: var(--color-ivory);
+  }
+
+  .cond-help {
+    margin-bottom: 2rem;
+  }
+  .cond-emergency {
+    margin-top: 1rem;
+  }
+</style>

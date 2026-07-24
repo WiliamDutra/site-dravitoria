@@ -1,0 +1,215 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import QualificationQuiz from '../components/QualificationQuiz.astro';
+import TrustBadge from '../components/TrustBadge.astro';
+import CFMDisclaimer from '../components/CFMDisclaimer.astro';
+import { site, mensagemAgendamento } from '../data/site';
+import { medicalWebPageNode, breadcrumbNode } from '../lib/schema';
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Agendar', href: '/agendar' },
+];
+const schemaNodes = [
+  medicalWebPageNode({
+    path: '/agendar',
+    name: 'Agende sua consulta online',
+    description:
+      'Agende sua consulta de psiquiatria online pelo WhatsApp, de onde você estiver.',
+  }),
+  breadcrumbNode(breadcrumb, '/agendar'),
+];
+
+const passos = [
+  {
+    t: 'Você chama no WhatsApp',
+    d: 'Toque no botão e mande um oi. Sem formulário longo, sem burocracia.',
+  },
+  {
+    t: 'A gente combina o horário',
+    d: 'Encontramos o melhor dia e horário para você, e acertamos os detalhes.',
+  },
+  {
+    t: 'Você recebe o link seguro',
+    d: 'No dia, é só entrar pelo link, de um lugar reservado, celular ou computador.',
+  },
+];
+---
+
+<BaseLayout
+  title="Agendar Consulta | Dra. Vitória Gomes"
+  description="Agende sua consulta de psiquiatria online, de onde você estiver. Atendimento humano e baseado em ciência."
+  schemaNodes={schemaNodes}
+>
+  <Section band="dark" class="ag-hero">
+    <Breadcrumb items={breadcrumb} class="ag-hero__crumb" />
+    <span class="eyebrow">Agende sua consulta</span>
+    <h1>Agende sua consulta online</h1>
+    <p class="ag-hero__lead anchor-phrase">
+      Dar o primeiro passo já é um ato de cuidado com você.
+    </p>
+    <p class="ag-hero__text">
+      O atendimento é 100% online, para todo o Brasil, e o agendamento é feito com
+      carinho pelo WhatsApp. Um convite ao cuidado, sem pressa, sem compromisso.
+    </p>
+    <div class="ag-hero__actions">
+      <WhatsAppCTA message={mensagemAgendamento} label="Falar no WhatsApp" variant="primary" />
+    </div>
+    <TrustBadge class="ag-hero__badge" />
+  </Section>
+
+  <!-- Como funciona o agendamento -->
+  <Section band="light" tight>
+    <span class="eyebrow">Como funciona</span>
+    <h2>Simples assim, em três passos</h2>
+    <ol class="ag-steps">
+      {
+        passos.map((p, i) => (
+          <li>
+            <span class="ag-steps__num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="ag-price">
+      <p>
+        <strong>Valor da consulta:</strong>
+        {site.preco.observacao}
+      </p>
+      <p class="ag-price__note">
+        O atendimento é particular. Muitos planos oferecem reembolso, forneço o
+        recibo e a documentação para você solicitar ao seu convênio.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Quiz de reflexão -->
+  <Section band="ivory">
+    <div class="ag-quiz-intro">
+      <span class="eyebrow">Antes de marcar</span>
+      <h2>Será que é hora de cuidar da sua mente?</h2>
+      <p class="lead">
+        Se você está em dúvida se “já é o caso”, respira e faz esse convite à
+        reflexão comigo. Não é um teste nem um diagnóstico, é só um jeito
+        carinhoso de se escutar.
+      </p>
+    </div>
+    <QualificationQuiz />
+  </Section>
+
+  <!-- Reforço final -->
+  <Section band="mid" tight>
+    <div class="ag-final">
+      <p class="ag-final__anchor">“Você não está sozinha nisso.”</p>
+      <p>
+        Quando você sentir que é a hora, estou aqui. É só chamar no WhatsApp, eu
+        vou adorar te receber.
+      </p>
+      <WhatsAppCTA message={mensagemAgendamento} label="Agende sua consulta" variant="outline-light" />
+      <CFMDisclaimer class="ag-disclaimer" />
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .ag-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .ag-hero__lead {
+    color: var(--color-clay);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin: 1rem 0 1rem;
+  }
+  .ag-hero__text {
+    color: var(--color-sand);
+    max-width: 54ch;
+    margin-bottom: 1.75rem;
+  }
+  .ag-hero__badge {
+    margin-top: 2rem;
+    color: var(--color-sand) !important;
+  }
+
+  .ag-steps {
+    list-style: none;
+    counter-reset: s;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .ag-steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .ag-steps li {
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+  }
+  .ag-steps__num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--color-clay);
+    font-weight: 600;
+  }
+  .ag-steps h3 {
+    margin: 0.4rem 0 0.4rem;
+    font-size: 1.25rem;
+  }
+  .ag-steps p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+  .ag-price {
+    margin-top: 2rem;
+    padding: 1.3rem 1.5rem;
+    background: var(--color-cream);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    max-width: 60ch;
+  }
+  .ag-price p {
+    margin: 0 0 0.5rem;
+  }
+  .ag-price__note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0 !important;
+  }
+
+  .ag-quiz-intro {
+    max-width: 60ch;
+    margin-bottom: 2rem;
+  }
+
+  .ag-final {
+    text-align: center;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+  .ag-final__anchor {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--color-clay);
+    margin-bottom: 1rem;
+  }
+  .ag-final p {
+    color: var(--color-sand);
+    margin-bottom: 1.5rem;
+  }
+  .ag-disclaimer {
+    margin-top: 2.5rem;
+    text-align: left;
+  }
+</style>

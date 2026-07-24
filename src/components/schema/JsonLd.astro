@@ -1,0 +1,13 @@
+---
+import { graph } from '../../lib/schema';
+
+interface Props {
+  nodes: object[];
+}
+const { nodes } = Astro.props;
+
+// Escapa `<` para evitar quebra de <script>/XSS ao injetar JSON-LD.
+const json = JSON.stringify(graph(nodes)).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" set:html={json} is:inline />

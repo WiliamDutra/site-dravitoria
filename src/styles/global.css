@@ -1,0 +1,334 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   Design tokens — Dra. Vitória Gomes
+   Fonte: saidas/estrutura-site/design-tokens.md (warm-earth · Cormorant + Jost)
+   NÃO inventar cores/fontes fora desta lista.
+   ============================================================================ */
+
+:root {
+  /* Paleta monocromática quente */
+  --color-espresso: #2b211a;
+  --color-coffee: #4a3b30;
+  --color-mocha: #7a5e4e;
+  --color-mocha-soft: #8a6f5e;
+  --color-clay: #a88c7a;
+  --color-sand: #c9b4a3;
+  --color-cream: #f6eee1;
+  --color-ivory: #f1e8da;
+  --color-primary: #6b5140;
+  --color-primary-hover: #574032;
+  --color-muted: #6e5b4c;
+  --color-line: #d8c7b5;
+  --color-line-dark: #4a3b30;
+
+  /* papéis semânticos */
+  --bg: var(--color-cream);
+  --bg-dark: var(--color-espresso);
+  --surface: #ffffff;
+  --text: var(--color-espresso);
+  --text-invert: var(--color-ivory);
+  --text-muted: var(--color-muted);
+  --accent: var(--color-clay);
+
+  /* raio e sombra */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 10px 30px -12px rgba(43, 33, 26, 0.35);
+  --shadow-card: 0 6px 20px -10px rgba(43, 33, 26, 0.25);
+
+  /* layout */
+  --container: 1200px;
+  --container-pad: clamp(1.25rem, 5vw, 4rem);
+  --section-pad: clamp(4.5rem, 10vw, 8rem);
+
+  /* escala tipográfica fluida */
+  --fs-display: clamp(2.75rem, 6vw, 4.5rem);
+  --fs-h1: clamp(2.25rem, 4vw, 3.25rem);
+  --fs-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --fs-h3: clamp(1.25rem, 2vw, 1.6rem);
+  --fs-body: 1.0625rem;
+  --fs-body-lg: 1.1875rem;
+  --fs-label: 0.875rem;
+  --fs-small: 0.8125rem;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: inherit;
+  margin: 0 0 0.5em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.15;
+  font-weight: 500;
+}
+h3 {
+  font-size: var(--fs-h3);
+  line-height: 1.2;
+}
+
+p {
+  margin: 0 0 1.1em;
+  max-width: 70ch;
+}
+
+a {
+  color: var(--color-primary);
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+}
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul,
+ol {
+  margin: 0 0 1.1em;
+  padding-left: 1.2em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respeitar redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── Utilitários de layout ────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.section {
+  padding-block: var(--section-pad);
+}
+.section--tight {
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+/* Faixas de cor (ritmo editorial escuro → médio → claro) */
+.band-dark {
+  background: var(--color-espresso);
+  color: var(--color-ivory);
+}
+.band-coffee {
+  background: var(--color-coffee);
+  color: var(--color-ivory);
+}
+.band-mid {
+  background: var(--color-mocha);
+  color: var(--color-ivory);
+}
+.band-light {
+  background: var(--color-cream);
+  color: var(--color-espresso);
+}
+.band-ivory {
+  background: var(--color-ivory);
+  color: var(--color-espresso);
+}
+
+/* Toque sutil de linho ao fundo de bandas claras (overlay creme forte). */
+.section.linen.band-light {
+  background-image: linear-gradient(
+      rgba(246, 238, 225, 0.93),
+      rgba(246, 238, 225, 0.94)
+    ),
+    url('/images/condicoes/textura.webp');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Seção de CTA: foto ambiental quente ao fundo, com overlay escuro para
+   manter o texto claro legível. Sobrepõe a cor de banda passada por prop. */
+.cta-section {
+  position: relative;
+  background-color: var(--color-espresso);
+  background-image: linear-gradient(
+      155deg,
+      rgba(43, 33, 26, 0.9),
+      rgba(43, 33, 26, 0.8)
+    ),
+    url('/images/hero/hero-bg.webp');
+  background-size: cover;
+  background-position: center;
+  color: var(--color-ivory);
+}
+.band-dark h1,
+.band-dark h2,
+.band-dark h3,
+.band-mid h1,
+.band-mid h2,
+.band-mid h3,
+.band-coffee h1,
+.band-coffee h2,
+.band-coffee h3 {
+  color: var(--color-ivory);
+}
+.band-dark a,
+.band-mid a,
+.band-coffee a {
+  color: var(--color-ivory);
+}
+
+/* ── Tipografia utilitária ────────────────────────────────────────────────── */
+.eyebrow {
+  font-family: 'Jost', sans-serif;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-clay);
+  margin: 0 0 0.9rem;
+  display: inline-block;
+}
+.band-light .eyebrow,
+.band-ivory .eyebrow {
+  color: var(--color-mocha);
+}
+/* Em faixas escuras/médias, o clay fica próximo do fundo. Usar sand p/ contraste. */
+.band-dark .eyebrow,
+.band-coffee .eyebrow,
+.band-mid .eyebrow {
+  color: var(--color-sand);
+}
+
+.display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: var(--fs-display);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+/* Frase-âncora: itálico Cormorant (detalhe editorial da referência) */
+.anchor-phrase {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.lead {
+  font-size: var(--fs-body-lg);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.small {
+  font-size: var(--fs-small);
+  letter-spacing: 0.02em;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* ── Conteúdo longo (páginas de condição / artigos) ───────────────────────── */
+.prose {
+  max-width: 70ch;
+}
+.prose > * + * {
+  margin-top: 1.1em;
+}
+.prose h2 {
+  margin-top: 2.2em;
+}
+.prose h3 {
+  margin-top: 1.6em;
+}
+.prose ul li,
+.prose ol li {
+  margin-bottom: 0.4em;
+}
+.prose strong {
+  font-weight: 500;
+  color: inherit;
+}
+
+/* ── Acessibilidade ───────────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--color-primary);
+  color: var(--color-ivory);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}

@@ -1,0 +1,475 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import ConditionCard from '../components/ConditionCard.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import TestimonialSlider from '../components/TestimonialSlider.astro';
+import TrustBadge from '../components/TrustBadge.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import CTASection from '../components/CTASection.astro';
+import { site } from '../data/site';
+import { clinicalConditions } from '../data/conditions';
+import { faqGeral } from '../data/faqGeral';
+import { testimonialsPublicaveis } from '../data/testimonials';
+import { medicalWebPageNode, faqPageNode } from '../lib/schema';
+
+const homeFaqs = faqGeral.slice(0, 5);
+const schemaNodes = [
+  medicalWebPageNode({
+    path: '/',
+    name: 'Psiquiatra online | Dra. Vitória Gomes',
+    description:
+      'Psiquiatria funcional integrativa por telemedicina. Saúde mental olhando você por inteiro.',
+  }),
+  faqPageNode(homeFaqs, '/'),
+];
+
+const cardDesc: Record<string, string> = {
+  ansiedade: 'O alarme que não desliga, o corpo em alerta. Entender a raiz, não só apagar o sintoma.',
+  depressao: 'Não é fraqueza nem falta de fé. É uma condição de saúde, e ela tem cuidado.',
+  esgotamento: 'Quando o cansaço não passa nem no fim de semana. O corpo não te sabota: te avisa.',
+  insonia: 'O sono conversa com a mente. Escutar o que a sua noite diz sobre os seus dias.',
+  'saude-mental-da-mulher': 'Cada fase da vida da mulher pede um olhar próprio, com acolhimento.',
+};
+---
+
+<BaseLayout
+  title="Psiquiatra online | Dra. Vitória Gomes"
+  description="Psiquiatria funcional integrativa por telemedicina. Saúde mental olhando você por inteiro. Agende sua consulta online."
+  schemaNodes={schemaNodes}
+  headerTransparent={true}
+>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero__inner container">
+      <div class="hero__content">
+        <span class="hero__kicker">Psiquiatria funcional integrativa · Telemedicina</span>
+        <h1 class="hero__title">
+          Você não está quebrada.<br />
+          <em>Talvez ninguém tenha olhado você por inteiro.</em>
+        </h1>
+        <p class="hero__lead">
+          {site.tagline} Aqui você é vista como gente, e não como um diagnóstico. A
+          gente olha junto o que você sente, o seu sono, o seu corpo, a sua história
+          e o que te dá sentido. Com calma, sem pressa e sem julgamento. O
+          atendimento é online, para todo o Brasil, de onde você estiver.
+        </p>
+        <div class="hero__actions">
+          <WhatsAppCTA variant="primary" label="Agende sua consulta" />
+          <a href="/psiquiatria-integrativa" class="hero__link">
+            Conheça a abordagem <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <TrustBadge class="hero__badge" />
+      </div>
+      <div class="hero__portrait">
+        <img
+          src="/images/hero/vitoria.webp"
+          width="1000"
+          height="1250"
+          alt="Dra. Vitória Gomes, médica"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </header>
+
+  <!-- O QUE É O CUIDADO -->
+  <Section band="light" class="linen">
+    <div class="care">
+      <div>
+        <span class="eyebrow">O cuidado</span>
+        <h2>Existem três caminhos diante de uma mente que sofre</h2>
+        <p class="lead">
+          Empurrar com a barriga (“vai passar”). Cuidar só do sintoma, deixando a
+          causa intacta. Ou cuidar da <strong>pessoa inteira</strong>: o sintoma,
+          sim, e também o sono, o corpo, a história, as relações e o sentido.
+        </p>
+        <p>
+          É esse terceiro caminho que eu escolhi caminhar com você. E sim, o
+          remédio entra quando é preciso, sem culpa, como parte de um cuidado
+          maior, e não como o cuidado todo. Integrativa não é ser contra remédio.
+          É somar.
+        </p>
+        <a href="/psiquiatria-integrativa" class="text-link">
+          O que é psiquiatria funcional integrativa <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <aside class="care__quote">
+        <p>“A pergunta não é só ‘o que você tem’. É ‘o que está acontecendo com você’.”</p>
+      </aside>
+    </div>
+  </Section>
+
+  <!-- CONDIÇÕES -->
+  <Section band="dark">
+    <span class="eyebrow">Como posso te ajudar</span>
+    <h2>Condições que eu cuido</h2>
+    <p class="lead" style="max-width: 58ch; color: var(--color-ivory);">
+      Cada uma com um olhar próprio, no seu tempo, nunca uma receita de bolo.
+      Toque para entender como o cuidado integrativo funciona para você em cada uma.
+    </p>
+    <div class="cond-grid">
+      {
+        clinicalConditions.map((c) => (
+          <ConditionCard
+            name={c.name}
+            href={`/${c.slug}`}
+            desc={cardDesc[c.slug] ?? c.metaDescription}
+            surface="coffee"
+          />
+        ))
+      }
+      <a href="/psiquiatria-integrativa" class="cond-grid__all">
+        <span>Ver a abordagem completa</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </Section>
+
+  <!-- SOBRE RESUMIDA -->
+  <Section band="mid">
+    <div class="about">
+      <div class="about__media">
+        <img
+          class="about__photo"
+          src="/images/sobre/vitoria.webp"
+          width="900"
+          height="1125"
+          alt="Dra. Vitória Gomes, médica, em retrato com luz natural"
+          loading="lazy"
+        />
+      </div>
+      <div class="about__text">
+        <span class="eyebrow">Quem cuida de você</span>
+        <h2>Dra. Vitória Gomes</h2>
+        <p>
+          Sou médica, cearense, e cuido de saúde mental olhando você por inteiro,
+          com ciência e com escuta de verdade. Aos meus pacientes, desde a
+          graduação até hoje, sou muito grata pela confiança. É o que me faz
+          querer ser melhor com você todos os dias.
+        </p>
+        <p class="about__anchor">
+          “Acolher não é prometer cura. É caminhar junto, com verdade e com ciência.”
+        </p>
+        <a href="/sobre" class="text-link text-link--light">
+          Conheça a minha história <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- PROVA SOCIAL (só se houver dado real consentido) -->
+  {
+    testimonialsPublicaveis.length > 0 && (
+      <Section band="light">
+        <span class="eyebrow">Quem já se cuidou comigo</span>
+        <h2>Relatos de pacientes</h2>
+        <TestimonialSlider />
+      </Section>
+    )
+  }
+
+  <!-- PSIQUIATRA ONLINE (quebra de objeção) -->
+  <Section band="ivory" tight>
+    <div class="online">
+      <div>
+        <span class="eyebrow">Telemedicina</span>
+        <h2>Um cuidado de verdade cabe numa tela</h2>
+        <p>
+          A teleconsulta em psiquiatria é regulamentada pelo Conselho Federal de
+          Medicina e tem o mesmo sigilo do presencial. Hoje, saúde mental já é a
+          maior fatia das teleconsultas no Brasil. E para quem mora longe de um
+          psiquiatra, o online não é só conveniência: é ter acesso a um cuidado
+          que antes não chegava até você.
+        </p>
+        <a href="/psiquiatra-online" class="text-link">
+          Como funciona a consulta online <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="online__facts">
+        <li><strong>Receita digital</strong> com validade legal, inclusive controlados.</li>
+        <li><strong>Sigilo médico</strong> igual ao presencial.</li>
+        <li><strong>Todo o Brasil</strong>, de onde você estiver.</li>
+        <li><strong>Acompanhamento</strong> contínuo, não um encontro só.</li>
+      </ul>
+    </div>
+  </Section>
+
+  <!-- FAQ -->
+  <Section band="light">
+    <div class="home-faq">
+      <div class="home-faq__intro">
+        <span class="eyebrow">Dúvidas</span>
+        <h2>Perguntas frequentes</h2>
+        <p>As dúvidas mais comuns sobre a consulta online.</p>
+        <a href="/faq" class="text-link">Ver todas as perguntas <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="home-faq__list">
+        <FAQAccordion items={homeFaqs} />
+      </div>
+    </div>
+  </Section>
+
+  <!-- CTA -->
+  <CTASection
+    heading="Talvez seja a hora de se olhar por inteiro"
+    body="Com calma e com companhia, no seu tempo. A consulta é online, de onde você estiver. É só um convite ao cuidado, sem pressa e sem compromisso."
+    anchorPhrase="Você não precisa atravessar isso sozinha."
+  />
+</BaseLayout>
+
+<style>
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: clamp(480px, 68vh, 680px);
+    display: flex;
+    align-items: center;
+    background:
+      radial-gradient(
+        1200px 600px at 75% 20%,
+        rgba(168, 140, 122, 0.25),
+        transparent 60%
+      ),
+      linear-gradient(160deg, #2b211a 0%, #4a3b30 55%, #3a2d24 100%);
+    color: var(--color-ivory);
+    overflow: hidden;
+    padding-top: 76px;
+    /* Para foto real: adicionar background-image full-bleed + manter o overlay abaixo. */
+  }
+  .hero__inner {
+    position: relative;
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+  .hero__content {
+    max-width: 620px;
+  }
+  .hero__portrait {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .hero__inner {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: stretch;
+    }
+    .hero__portrait {
+      display: block;
+      justify-self: end;
+      align-self: stretch;
+      width: 100%;
+      max-width: 440px;
+      min-height: 420px;
+    }
+    .hero__portrait img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 28%;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(201, 180, 163, 0.35);
+      box-shadow: var(--shadow-soft);
+    }
+  }
+  .hero__kicker {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-sand);
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+  .hero__title {
+    font-size: var(--fs-display);
+    line-height: 1.04;
+    font-weight: 500;
+    margin: 0 0 1.5rem;
+    color: var(--color-ivory);
+    max-width: 18ch;
+  }
+  .hero__title em {
+    font-style: italic;
+    color: var(--color-sand);
+  }
+  .hero__lead {
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--color-ivory);
+    max-width: 56ch;
+    margin-bottom: 2rem;
+  }
+  .hero__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .hero__link {
+    color: var(--color-ivory);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--color-clay);
+    padding-bottom: 3px;
+  }
+  .hero__badge {
+    margin-top: 2.25rem;
+    color: var(--color-sand) !important;
+    display: flex;
+  }
+
+  /* Utils */
+  .text-link {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .text-link:hover {
+    color: var(--color-primary-hover);
+  }
+  .text-link--light {
+    color: var(--color-ivory);
+  }
+
+  /* O cuidado */
+  .care {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .care {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+  .care__quote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+    line-height: 1.3;
+    color: var(--color-mocha);
+    border-left: 3px solid var(--color-clay);
+    padding-left: 1.5rem;
+    margin: 0;
+  }
+
+  /* Condições grid */
+  .cond-grid {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .cond-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1024px) {
+    .cond-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+  .cond-grid__all {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px dashed var(--color-clay);
+    border-radius: var(--radius-md);
+    color: var(--color-ivory);
+    text-decoration: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.15s ease;
+  }
+  .cond-grid__all:hover {
+    background: rgba(241, 232, 218, 0.06);
+    color: var(--color-ivory);
+  }
+
+  /* Sobre */
+  .about {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .about {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+  }
+  .about__photo {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    box-shadow: var(--shadow-card);
+  }
+  .about__anchor {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--color-sand);
+    margin: 1.25rem 0;
+  }
+
+  /* Online */
+  .online {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .online {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+  .online__facts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.8rem;
+  }
+  .online__facts li {
+    padding: 0.9rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+  }
+
+  /* Home FAQ */
+  .home-faq {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 900px) {
+    .home-faq {
+      grid-template-columns: 0.8fr 1.2fr;
+      align-items: start;
+    }
+  }
+  .home-faq__intro {
+    position: sticky;
+    top: 100px;
+  }
+</style>

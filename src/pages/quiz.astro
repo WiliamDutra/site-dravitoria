@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import QualificationQuiz from '../components/QualificationQuiz.astro';
+import CFMDisclaimer from '../components/CFMDisclaimer.astro';
+---
+
+<BaseLayout
+  title="Será que é hora de cuidar da sua mente?"
+  description="Um convite acolhedor à reflexão sobre a sua saúde mental. Não é diagnóstico, é um jeito de se escutar."
+  noindex={true}
+>
+  <Section band="dark" class="quiz-hero">
+    <span class="eyebrow">Um convite à reflexão</span>
+    <h1>Será que é hora de cuidar da sua mente?</h1>
+    <p class="quiz-hero__lead anchor-phrase">
+      Respira fundo comigo. Essa conversa é com calma.
+    </p>
+  </Section>
+
+  <Section band="light">
+    <div class="quiz-wrap">
+      <QualificationQuiz />
+      <CFMDisclaimer class="quiz-disclaimer" />
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .quiz-hero__lead {
+    color: var(--color-clay);
+    font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+    margin-top: 1rem;
+  }
+  .quiz-wrap {
+    max-width: 780px;
+    margin-inline: auto;
+  }
+  .quiz-disclaimer {
+    margin-top: 2.5rem;
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+import ConditionPage from '../layouts/ConditionPage.astro';
+import Section from '../components/ui/Section.astro';
+import ConditionCard from '../components/ConditionCard.astro';
+import { getCondition, clinicalConditions } from '../data/conditions';
+
+const condition = getCondition('psiquiatria-integrativa')!;
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Psiquiatria Integrativa', href: '/psiquiatria-integrativa' },
+];
+
+// Descrições curtas para os cards (derivadas da 1ª frase da uniqueIntro de cada condição)
+const cardDesc: Record<string, string> = {
+  ansiedade:
+    'O alarme que não desliga, o corpo em alerta. Entender a raiz, não só apagar o sintoma.',
+  depressao:
+    'Não é fraqueza nem falta de fé. É uma condição de saúde, e ela tem cuidado.',
+  esgotamento:
+    'Quando o cansaço não passa nem no fim de semana. O corpo não te sabota: te avisa.',
+  insonia:
+    'O sono conversa com a mente. Escutar o que a sua noite diz sobre os seus dias.',
+  'saude-mental-da-mulher':
+    'Cada fase da vida da mulher pede um olhar próprio, não um "é da sua cabeça".',
+};
+---
+
+<ConditionPage condition={condition} breadcrumb={breadcrumb}>
+  <!-- Seção extra do pilar: linka para todas as condições -->
+  <Section band="light">
+    <span class="eyebrow">Cuidado por inteiro</span>
+    <h2>A abordagem integrativa aplicada a cada condição</h2>
+    <p class="lead" style="max-width: 60ch;">
+      O mesmo olhar, a pessoa inteira, se traduz de um jeito próprio para cada
+      queixa. Veja como o cuidado acontece em cada uma:
+    </p>
+    <div class="pillar-grid">
+      {
+        clinicalConditions.map((c) => (
+          <ConditionCard
+            name={c.name}
+            href={`/${c.slug}`}
+            desc={cardDesc[c.slug] ?? c.metaDescription}
+            surface="cream"
+          />
+        ))
+      }
+    </div>
+  </Section>
+</ConditionPage>
+
+<style>
+  .pillar-grid {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .pillar-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1024px) {
+    .pillar-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+</style>

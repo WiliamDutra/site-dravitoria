@@ -1,0 +1,84 @@
+---
+interface Props {
+  name: string;
+  href: string;
+  desc: string;
+  kicker?: string;
+  surface?: 'coffee' | 'cream' | 'surface';
+}
+const { name, href, desc, kicker, surface = 'surface' } = Astro.props;
+---
+
+<a href={href} class:list={['cond-card', `cond-card--${surface}`]}>
+  {kicker && <span class="cond-card__kicker">{kicker}</span>}
+  <h3 class="cond-card__name">{name}</h3>
+  <p class="cond-card__desc">{desc}</p>
+  <span class="cond-card__more">Entenda o cuidado <span aria-hidden="true">→</span></span>
+</a>
+
+<style>
+  .cond-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: clamp(1.4rem, 2.5vw, 1.9rem);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+    height: 100%;
+  }
+  .cond-card--surface {
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    color: var(--color-espresso);
+    box-shadow: var(--shadow-card);
+  }
+  .cond-card--cream {
+    background: var(--color-cream);
+    border: 1px solid var(--color-line);
+    color: var(--color-espresso);
+  }
+  .cond-card--coffee {
+    background: var(--color-coffee);
+    color: var(--color-ivory);
+  }
+  .cond-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+  }
+  .cond-card__kicker {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-clay);
+  }
+  .cond-card__name {
+    font-size: 1.4rem;
+    margin: 0;
+    color: inherit;
+  }
+  .cond-card__desc {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    flex-grow: 1;
+  }
+  .cond-card--coffee .cond-card__desc {
+    color: var(--color-sand);
+  }
+  .cond-card__more {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-top: 0.5rem;
+  }
+  .cond-card--coffee .cond-card__more {
+    color: var(--color-clay);
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+type Surface = 'coffee' | 'clay' | 'cream' | 'surface' | 'outline';
+interface Props {
+  surface?: Surface;
+  class?: string;
+  as?: string;
+  href?: string;
+}
+const {
+  surface = 'surface',
+  class: className = '',
+  as,
+  href,
+} = Astro.props;
+const Tag = href ? 'a' : (as ?? 'div');
+---
+
+<Tag
+  href={href}
+  class:list={['card', `card--${surface}`, href && 'card--link', className]}
+>
+  <slot />
+</Tag>
+
+<style>
+  .card {
+    border-radius: var(--radius-md);
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+    box-shadow: var(--shadow-card);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card--coffee {
+    background: var(--color-coffee);
+    color: var(--color-ivory);
+  }
+  .card--clay {
+    background: var(--color-clay);
+    color: var(--color-espresso);
+  }
+  .card--cream {
+    background: var(--color-cream);
+    color: var(--color-espresso);
+    border: 1px solid var(--color-line);
+  }
+  .card--surface {
+    background: var(--surface);
+    color: var(--color-espresso);
+    border: 1px solid var(--color-line);
+  }
+  .card--outline {
+    background: transparent;
+    border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+    box-shadow: none;
+  }
+  .card--link {
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+  }
+  .card--link:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+  }
+</style>

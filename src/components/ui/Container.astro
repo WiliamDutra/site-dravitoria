@@ -1,0 +1,18 @@
+---
+interface Props {
+  as?: string;
+  class?: string;
+  narrow?: boolean;
+}
+const { as: Tag = 'div', class: className = '', narrow = false } = Astro.props;
+---
+
+<Tag class:list={['container', narrow && 'container--narrow', className]}>
+  <slot />
+</Tag>
+
+<style>
+  .container--narrow {
+    max-width: 820px;
+  }
+</style>

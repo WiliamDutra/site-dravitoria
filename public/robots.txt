@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Páginas de conversão (noindex) — evitar rastreio direto
+Disallow: /quiz
+Disallow: /lp/
+
+# Sitemap (gerado pelo @astrojs/sitemap no build)
+Sitemap: https://dravitoriagomes.com.br/sitemap-index.xml

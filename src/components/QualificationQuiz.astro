@@ -1,0 +1,281 @@
+---
+/**
+ * Quiz de qualificação, acolhedor, NÃO diagnostica.
+ * 4 perguntas da copy mestra (sono · corpo · automático · sentido).
+ * Encaminha para WhatsApp (nenhum dado sensível é gravado no servidor, as respostas
+ * ficam só no dispositivo, para reflexão). Consentimento LGPD antes do encaminhamento.
+ */
+import { whatsappLink } from '../data/site';
+
+const perguntas = [
+  {
+    id: 'sono',
+    label:
+      'Você anda dormindo mal, ou acordando já cansada, como se a noite não descansasse?',
+  },
+  {
+    id: 'corpo',
+    label:
+      'O seu corpo anda falando junto com a mente? (tensão, dor, estômago, vontade que sumiu)',
+  },
+  {
+    id: 'automatico',
+    label:
+      'Você sente que vive no automático, cumprindo o dia, mas sem se reconhecer mais ali dentro?',
+  },
+  {
+    id: 'sentido',
+    label: 'E, lá no fundo, falta algo que dê sentido, leveza, paz?',
+  },
+];
+
+const opcoes = [
+  { value: 'sim', label: 'Sim, bastante' },
+  { value: 'asvezes', label: 'Às vezes' },
+  { value: 'nao', label: 'Quase nunca' },
+];
+
+const waBase = whatsappLink();
+const mensagemQuiz =
+  'Olá, Dra. Vitória! Fiz a reflexão no seu site e senti que é hora de me olhar por inteiro. Gostaria de marcar uma consulta online. 🤍';
+---
+
+<form class="quiz" id="quiz" data-wa-base={waBase} novalidate>
+  <div class="quiz__intro">
+    <p>
+      Não é um teste, nem um diagnóstico, diagnóstico é coisa de consulta, com
+      tempo e escuta. São só quatro perguntas pra você pensar com sinceridade, só
+      pra você. Respire fundo comigo.
+    </p>
+  </div>
+
+  <ol class="quiz__list">
+    {
+      perguntas.map((p, i) => (
+        <li class="quiz__q">
+          <fieldset>
+            <legend>
+              <span class="quiz__num">{i + 1}</span>
+              {p.label}
+            </legend>
+            <div class="quiz__opts">
+              {opcoes.map((o) => (
+                <label class="quiz__opt">
+                  <input type="radio" name={p.id} value={o.value} />
+                  <span>{o.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="quiz__result" id="quiz-result" hidden>
+    <p class="quiz__result-text">
+      Se você balançou a cabeça pra alguma dessas, não significa que tem algo
+      “errado” com você. Significa que <strong>vale a pena olhar você por
+      inteiro</strong>, o sono, o corpo, a sua história e o que te dá sentido,
+      em vez de tratar um sintoma de cada vez. Sem pressa e sem julgamento. 🤍
+    </p>
+
+    <label class="quiz__consent">
+      <input type="checkbox" id="quiz-consent" />
+      <span>
+        Li e concordo em ser atendida pelo WhatsApp para agendar minha consulta.
+        Minhas respostas acima <strong>não são enviadas nem armazenadas</strong>,
+        ficam só neste dispositivo. Entendo que o conteúdo é educativo e não
+        substitui a consulta. Veja a
+        <a href="/politica-de-privacidade">Política de Privacidade</a>.
+      </span>
+    </label>
+
+    <a
+      id="quiz-wa"
+      class="quiz__wa"
+      href={`${waBase}?text=${encodeURIComponent(mensagemQuiz)}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-disabled="true"
+    >
+      Quero conversar com a Dra. Vitória <span aria-hidden="true">→</span>
+    </a>
+  </div>
+
+  <button type="button" class="quiz__reveal" id="quiz-reveal">
+    Ver o próximo passo <span aria-hidden="true">↓</span>
+  </button>
+</form>
+
+<style>
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    box-shadow: var(--shadow-card);
+  }
+  .quiz__intro p {
+    color: var(--text-muted);
+    margin: 0 0 1.5rem;
+  }
+  .quiz__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .quiz__q fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .quiz__q legend {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 0.9rem;
+    display: block;
+  }
+  .quiz__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-clay);
+    color: var(--color-espresso);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .quiz__opts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .quiz__opt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+  .quiz__opt:hover {
+    border-color: var(--color-clay);
+  }
+  .quiz__opt:has(input:checked) {
+    background: color-mix(in srgb, var(--color-clay) 20%, transparent);
+    border-color: var(--color-clay);
+  }
+  .quiz__opt input {
+    accent-color: var(--color-primary);
+  }
+
+  .quiz__reveal {
+    margin-top: 1.75rem;
+    background: transparent;
+    border: 1.5px solid var(--color-primary);
+    color: var(--color-primary);
+    font-family: 'Jost', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.6rem;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .quiz__reveal:hover {
+    background: var(--color-primary);
+    color: var(--color-ivory);
+  }
+  .quiz__reveal[hidden] {
+    display: none;
+  }
+
+  .quiz__result {
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .quiz__result-text {
+    color: var(--color-espresso);
+    font-size: 1.02rem;
+  }
+  .quiz__consent {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    margin: 1.25rem 0 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .quiz__consent input {
+    margin-top: 0.2rem;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+  }
+  .quiz__consent a {
+    color: var(--color-primary);
+  }
+  .quiz__wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--color-primary);
+    color: var(--color-ivory);
+    font-family: 'Jost', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.95rem 1.8rem;
+    border-radius: var(--radius-pill);
+    transition:
+      background-color 0.18s ease,
+      opacity 0.18s ease;
+  }
+  .quiz__wa[aria-disabled='true'] {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .quiz__wa:hover {
+    background: var(--color-primary-hover);
+    color: var(--color-ivory);
+  }
+</style>
+
+<script>
+  const reveal = document.getElementById('quiz-reveal');
+  const result = document.getElementById('quiz-result');
+  const consent = document.getElementById('quiz-consent') as HTMLInputElement | null;
+  const wa = document.getElementById('quiz-wa');
+
+  reveal?.addEventListener('click', () => {
+    if (result) result.hidden = false;
+    reveal.setAttribute('hidden', 'true');
+    result?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  const syncConsent = () => {
+    if (!wa || !consent) return;
+    wa.setAttribute('aria-disabled', String(!consent.checked));
+  };
+  consent?.addEventListener('change', syncConsent);
+  syncConsent();
+</script>

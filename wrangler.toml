@@ -1,0 +1,19 @@
+# Cloudflare Pages — site estático da Dra. Vitória Gomes.
+#
+# Domínio: dravitoriagomes.com.br (registrado no Registro.br).
+# Conta Cloudflare: marcos326@gmail.com.
+#
+# Deploy (só rodar quando o site estiver pronto para ir ao ar):
+#   npm run deploy            → produção
+#   npm run deploy:preview    → branch de preview
+#
+# Sem SSR/adapter: o agendamento é só WhatsApp, então não há rota de servidor.
+# Ver DEPLOY.md para o passo a passo completo (zona + Registro.br).
+
+name = "dra-vitoria-gomes"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "./dist"
+
+# Variáveis públicas podem ir aqui; chaves sensíveis, via painel do Cloudflare (Secrets).
+# [vars]
+# PUBLIC_SITE_URL = "https://dravitoriagomes.com.br"

@@ -1,0 +1,183 @@
+---
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
+import Section from '../../../components/ui/Section.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
+import TrustBadge from '../../../components/TrustBadge.astro';
+import WhatsAppCTA from '../../../components/WhatsAppCTA.astro';
+import FAQAccordion from '../../../components/FAQAccordion.astro';
+import EmergencyBanner from '../../../components/EmergencyBanner.astro';
+import RelatedContent from '../../../components/RelatedContent.astro';
+import CTASection from '../../../components/CTASection.astro';
+import CFMDisclaimer from '../../../components/CFMDisclaimer.astro';
+import { combinacoes, getCombo } from '../../../data/combinacoes';
+import { getRegiao } from '../../../data/regioes';
+import { getCondition } from '../../../data/conditions';
+import {
+  medicalWebPageNode,
+  faqPageNode,
+  breadcrumbNode,
+} from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return combinacoes.map((c) => ({
+    params: { regiao: c.regiaoSlug, condicao: c.conditionSlug },
+  }));
+}
+
+const { regiao: regiaoSlug, condicao: condicaoSlug } = Astro.params;
+const combo = getCombo(regiaoSlug!, condicaoSlug!)!;
+const r = getRegiao(regiaoSlug!)!;
+const cond = getCondition(condicaoSlug!)!;
+const path = `/psiquiatra-online/${r.slug}/${cond.slug}`;
+
+const breadcrumb = [
+  { name: 'Início', href: '/' },
+  { name: 'Psiquiatra Online', href: '/psiquiatra-online' },
+  { name: r.name, href: `/psiquiatra-online/${r.slug}` },
+  { name: cond.name, href: path },
+];
+
+const schemaNodes = [
+  medicalWebPageNode({
+    path,
+    name: combo.heroHeading,
+    description: combo.metaDescription,
+  }),
+  faqPageNode(combo.uniqueFaqs, path),
+  breadcrumbNode(breadcrumb, path),
+];
+
+const ctaMessage = `Olá, Dra. Vitória! Vim pela página de ${cond.name} ${r.displayName} e gostaria de marcar uma consulta online. 🤍`;
+
+const related = [
+  { label: `Tudo sobre ${cond.name.toLowerCase()}`, href: `/${cond.slug}` },
+  { label: `Psiquiatra online ${r.displayName}`, href: `/psiquiatra-online/${r.slug}` },
+  { label: 'O que é psiquiatria integrativa', href: '/psiquiatria-integrativa' },
+  { label: 'Agende sua consulta', href: '/agendar' },
+];
+---
+
+<BaseLayout
+  title={combo.metaTitle}
+  description={combo.metaDescription}
+  schemaNodes={schemaNodes}
+>
+  <!-- HERO -->
+  <Section band="dark" class="combo-hero">
+    <Breadcrumb items={breadcrumb} class="combo-hero__crumb" />
+    <span class="eyebrow">{combo.heroKicker}</span>
+    <h1 class="combo-hero__h1">{combo.heroHeading}</h1>
+    <div class="combo-hero__actions">
+      <WhatsAppCTA message={ctaMessage} variant="outline-light" />
+      <a href={`/${cond.slug}`} class="combo-hero__link">Entenda a condição →</a>
+    </div>
+    <TrustBadge class="combo-hero__badge" />
+  </Section>
+
+  <!-- INTRO (condição + região juntas) -->
+  <Section band="light">
+    <div class="prose combo-intro">
+      {combo.uniqueIntro.map((p) => <p class="lead">{p}</p>)}
+      <blockquote class="combo-note">{combo.localNote}</blockquote>
+    </div>
+  </Section>
+
+  <!-- PROBLEMAS REGIONAIS -->
+  <Section band="ivory" tight>
+    <span class="eyebrow">O que pesa por aqui</span>
+    <h2>Os desafios de {cond.name.toLowerCase()} {r.displayName}</h2>
+    <ul class="prob-list">
+      {combo.regionalProblems.map((p) => <li>{p}</li>)}
+    </ul>
+  </Section>
+
+  {
+    cond.emergencyNote && (
+      <Section band="light" tight>
+        <EmergencyBanner />
+      </Section>
+    )
+  }
+
+  <!-- FAQ específica do combo -->
+  <Section band="ivory">
+    <FAQAccordion
+      items={combo.uniqueFaqs}
+      title={`Dúvidas sobre ${cond.name.toLowerCase()} ${r.displayName}`}
+    />
+  </Section>
+
+  <!-- RELACIONADOS + DISCLAIMER -->
+  <Section band="light" tight>
+    <RelatedContent items={related} />
+    <CFMDisclaimer text={cond.cfmDisclaimer} />
+  </Section>
+
+  <!-- CTA -->
+  <CTASection
+    heading={`${cond.name} ${r.displayName}? Vamos olhar isso juntas`}
+    body="A consulta é online, de onde você estiver, com calma, com acolhimento e sem julgamento."
+    anchorPhrase={cond.anchorPhrase}
+    message={ctaMessage}
+  />
+</BaseLayout>
+
+<style>
+  .combo-hero__crumb {
+    margin-bottom: 1.5rem;
+  }
+  .combo-hero__h1 {
+    max-width: 24ch;
+  }
+  .combo-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .combo-hero__link {
+    color: var(--color-ivory);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--color-clay);
+    padding-bottom: 2px;
+  }
+  .combo-hero__badge {
+    margin-top: 2rem;
+    color: var(--color-sand) !important;
+  }
+  .combo-intro {
+    max-width: 760px;
+  }
+  .combo-note {
+    margin: 1.5rem 0 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 3px solid var(--color-clay);
+    background: var(--color-ivory);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-style: italic;
+    color: var(--color-coffee);
+  }
+  .prob-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 0.8rem;
+    max-width: 68ch;
+  }
+  .prob-list li {
+    position: relative;
+    padding-left: 1.6rem;
+    line-height: 1.5;
+  }
+  .prob-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0.3rem;
+    top: -0.1em;
+    color: var(--color-primary);
+    font-size: 1.3em;
+  }
+</style>
