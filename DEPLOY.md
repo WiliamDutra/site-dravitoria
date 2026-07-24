@@ -77,22 +77,64 @@ Precisa ser no painel porque o token local tem apenas `zone (read)`, sem permiss
 
 ---
 
-## Passo 3. Publicar o site no Cloudflare Pages
+## Passo 3. Publicar via GitHub (recomendado)
 
-Rodar na pasta `site/`:
+O repositório já existe e é **privado**:
+**https://github.com/marcosyurimelo/dra-vitoria-gomes-site** (branch `main`)
+
+> ⚠️ O repositório é **só a pasta `site/`**, de propósito. A pasta acima contém
+> documentos pessoais da cliente (certidão de casamento, contrato com CPF e RG).
+> **Nunca** inicialize git na raiz do projeto.
+
+### Conectar o Cloudflare Pages ao repositório
+
+1. Painel do Cloudflare → **Workers & Pages** → **Create** → aba **Pages**
+2. **Connect to Git** e autorizar o GitHub (escolher só este repositório)
+3. Selecionar `dra-vitoria-gomes-site`
+4. Configurar assim:
+
+| Campo | Valor |
+|---|---|
+| Production branch | `main` |
+| Framework preset | `Astro` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | deixar vazio (a raiz do repo já é o site) |
+
+5. Em **Environment variables** (produção), adicionar:
+
+| Variável | Valor |
+|---|---|
+| `PUBLIC_SITE_URL` | `https://dravitoriagomes.com.br` |
+| `PUBLIC_WHATSAPP` | `5585992364924` |
+| `NODE_VERSION` | `22` |
+| `GOOGLE_MAPS_EMBED_KEY` | (só quando tiver a chave) |
+
+> Não colocar `OPENAI_API_KEY` aqui. Ela serve só para gerar imagens localmente
+> e não é usada no build.
+
+6. **Save and Deploy**
+
+### Como fica o fluxo de trabalho
+
+A partir daí, o deploy é automático:
 
 ```bash
-npm run deploy
+git add -A
+git commit -m "descrição da mudança"
+git push
 ```
 
-Isso faz o build (`astro check && astro build`) e envia o `dist/` para o projeto Pages `dra-vitoria-gomes`. Na primeira execução o wrangler cria o projeto e pergunta a branch de produção (usar `main`).
+Cada push na `main` publica em produção. Cada push em outra branch ou Pull Request
+gera um **preview** com URL própria, ótimo para a cliente aprovar antes de ir ao ar.
 
-O retorno inclui uma URL temporária tipo `https://dra-vitoria-gomes.pages.dev`, útil para conferir tudo antes de ligar o domínio.
+### Alternativa: deploy manual
 
-Para subir uma versão de teste sem mexer na produção:
+Continua disponível, sem depender do GitHub:
 
 ```bash
-npm run deploy:preview
+npm run deploy          # produção
+npm run deploy:preview  # preview
 ```
 
 ---
