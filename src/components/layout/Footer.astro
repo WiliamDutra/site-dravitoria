@@ -32,7 +32,8 @@ const ano = 2026; // fuso America/Fortaleza, atualizar anualmente
           <a
             href={whatsappLink(mensagemAgendamento)}
             target="_blank"
-            rel="noopener noreferrer">WhatsApp</a
+            rel="noopener noreferrer"
+            data-cta="whatsapp">WhatsApp</a
           >
         </div>
       </div>
@@ -108,6 +109,10 @@ const ano = 2026; // fuso America/Fortaleza, atualizar anualmente
     </div>
   </div>
 </footer>
+
+<script>
+  import '../../scripts/whatsapp-ref';
+</script>
 
 <style>
   .site-footer {
