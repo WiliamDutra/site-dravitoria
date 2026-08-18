@@ -1,0 +1,40 @@
+---
+// Estrelas em estado "sem nota real ainda" — não sugerir avaliação que não
+// existe (ver src/data/dravitoria-lp/reviews.ts, mesma régua de compliance).
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['star-rating', className]}>
+  <span class="star-rating__stars" aria-hidden="true">
+    {
+      Array.from({ length: 5 }).map(() => (
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 3.5l2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-3-5.3 3 1.1-6L3.4 9.9l6-.8L12 3.5Z" />
+        </svg>
+      ))
+    }
+  </span>
+  <span class="star-rating__note">Avaliações reais em breve</span>
+</div>
+
+<style>
+  .star-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .star-rating__stars {
+    display: inline-flex;
+    gap: 2px;
+    color: var(--color-clay);
+  }
+  .star-rating__note {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+  }
+</style>

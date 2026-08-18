@@ -1,0 +1,107 @@
+---
+// NOVO (Iteração 3) — reforço final antes do Instagram/FAQ, inspirado no CTA
+// final da referência Paola Ferrer/Claude Design. Copy trocada: "rótulo"/
+// "prescrição automática" mantido (não é termo clínico restrito), mas sem
+// "consulta psiquiátrica" do original.
+import Section from '../../ui/Section.astro';
+import WhatsAppCTA from '../../WhatsAppCTA.astro';
+import { finalCtaHeading, finalCtaBody } from '../../../data/dravitoria-lp/copy';
+
+interface Props {
+  message?: string;
+}
+const { message } = Astro.props;
+
+// Nota real e compliant (sem urgência/vagas inventadas) pra faixa clara
+// abaixo do cartão escuro — mesma técnica de "cartão em duas partes" da
+// referência, texto reescrito.
+const disclaimer =
+  'Atendimento por telemedicina, com agenda sempre combinada com você pelo WhatsApp.';
+---
+
+<Section band="light" tight class="dvlp-final-cta">
+  <div class="dvlp-final-cta__inner">
+    <h2>{finalCtaHeading}</h2>
+    <p class="dvlp-final-cta__lead">{finalCtaBody}</p>
+
+    <div class="dvlp-final-cta__stack">
+      <div class="dvlp-final-cta__dark">
+        <p>Aqui, o cuidado é construído com você, sem pressa e sem promessa vazia.</p>
+        <div class="dvlp-final-cta__btn-wrap">
+          <WhatsAppCTA message={message} label="Agendar via WhatsApp" variant="primary" class="dvlp-final-cta__btn" />
+        </div>
+      </div>
+      <div class="dvlp-final-cta__light">
+        <p>{disclaimer}</p>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-final-cta é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-final-cta) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-final-cta) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-final-cta__inner {
+    max-width: 620px;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .dvlp-final-cta__lead {
+    color: var(--color-coffee);
+    margin-bottom: 1.75rem;
+  }
+
+  .dvlp-final-cta__stack {
+    margin-top: 0;
+  }
+  .dvlp-final-cta__dark {
+    position: relative;
+    background: var(--color-espresso);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: clamp(1.5rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2rem) 2.25rem;
+  }
+  .dvlp-final-cta__dark p {
+    color: var(--color-sand);
+    margin: 0;
+  }
+  .dvlp-final-cta__light {
+    background: var(--surface);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: 2rem 1.25rem 1rem;
+    box-shadow: var(--shadow-soft);
+  }
+  .dvlp-final-cta__light p {
+    max-width: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin: 0;
+  }
+  .dvlp-final-cta__btn-wrap {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    transform: translate(-50%, 50%);
+    z-index: 1;
+  }
+
+  /* :global() necessário — .dvlp-final-cta__btn é aplicado no <a> renderizado
+     por WhatsAppCTA.astro (componente compartilhado); mesma técnica já usada
+     no Hero/ProblemSection, sem tocar no arquivo original. */
+  :global(.dvlp-final-cta__btn.wa-cta--primary) {
+    background: #25d366;
+    color: #0b3b23;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+  }
+  :global(.dvlp-final-cta__btn.wa-cta--primary:hover) {
+    background: #1fb857;
+    color: #0b3b23;
+  }
+</style>

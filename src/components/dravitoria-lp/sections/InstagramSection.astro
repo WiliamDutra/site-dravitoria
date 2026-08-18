@@ -1,0 +1,119 @@
+---
+// NOVO (Iteração 3) — seção Instagram com mockup de celular (só CSS, sem
+// print real ainda — mesmo padrão de placeholder já usado no resto da LP).
+// Handle e link reais (site.canais.instagram/instagramUrl). O WhatsApp CTA
+// já cobre agendamento em vários blocos; SchedulingForm (bloco 9 do pedido
+// original) também linka o Instagram — pequena redundância aceitável, não
+// tirei aquele bloco sem perguntar.
+import Section from '../../ui/Section.astro';
+import { site } from '../../../data/site';
+import { instagramInvite } from '../../../data/dravitoria-lp/copy';
+---
+
+<Section band="mid" class="dvlp-instagram">
+  <div class="dvlp-instagram__grid">
+    <div class="dvlp-instagram__text">
+      <div class="dvlp-instagram__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </div>
+      <span class="eyebrow">No Instagram</span>
+      <h2>Um pouco mais de mim, todos os dias</h2>
+      <div class="dvlp-instagram__quote">
+        <p>{instagramInvite}</p>
+      </div>
+      <a href={site.canais.instagramUrl} target="_blank" rel="noopener noreferrer" class="dvlp-instagram__link">
+        Acessar Instagram
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="dvlp-instagram__phone" aria-hidden="true">
+      <div class="dvlp-instagram__phone-screen">
+        <img src="/images/hero/insta.webp" alt="Perfil do Instagram da Dra. Vitória Gomes" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-instagram é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-instagram) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-instagram) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-instagram__grid {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .dvlp-instagram__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+  .dvlp-instagram__icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+    color: #fff;
+    background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+  }
+  .dvlp-instagram__quote {
+    margin: 1rem 0 1.5rem;
+    background: var(--color-espresso);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+  }
+  .dvlp-instagram__quote p {
+    color: var(--color-sand);
+    margin: 0;
+  }
+  .dvlp-instagram__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-ivory);
+    color: var(--color-espresso) !important;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .dvlp-instagram__link:hover {
+    background: var(--color-clay);
+  }
+
+  .dvlp-instagram__phone {
+    display: flex;
+    justify-content: center;
+  }
+  .dvlp-instagram__phone-screen {
+    width: min(220px, 60vw);
+    /* Mesma proporção do print real (297x535) — evita cortar texto nas
+       bordas, que acontecia forçando um recorte 9/18 (`object-fit: cover`)
+       num print com proporção diferente. */
+    aspect-ratio: 297 / 535;
+    border-radius: 32px;
+    border: 8px solid var(--color-espresso);
+    background: var(--color-coffee);
+    overflow: hidden;
+  }
+  .dvlp-instagram__phone-screen img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

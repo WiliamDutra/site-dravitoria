@@ -1,0 +1,224 @@
+---
+// Bloco 2 — bloco de objeção/oferta (cartão escuro + cartão claro
+// "Oferecemos:"). Antes tinha um texto de intro ("Um pouco sobre mim" + bio +
+// formação) e uma galeria de fotos placeholder; os dois foram removidos por
+// pedido explícito — a intro repetia o mesmo conteúdo que já existe no bloco
+// Sobre (AboutDoctor.astro, mesma `aboutBio`), e a galeria ficava vazia sem
+// foto real. O mecanismo da galeria continua disponível pra quando houver
+// foto real: ver src/data/dravitoria-lp/gallery.ts e
+// src/components/dravitoria-lp/ui/ExpandableGallery.tsx (não deletados, só
+// desconectados daqui).
+//
+// O bloco "Oferecemos" foi inspirado num print de outra LP ("Se você está
+// cogitando marcar uma consulta com psiquiatra..." + checklist). A ESTRUTURA
+// foi replicada, mas a copy NÃO — o original usa "psiquiátrica", "exame
+// psíquico", "hipóteses diagnósticas" (a Dra. Vitória não pode reivindicar
+// isso: régua do brief, sem RQE validado, e "sem diagnóstico à distância" é
+// regra de compliance do CFM). Toda a copy abaixo foi reescrita compatível.
+import Container from '../../ui/Container.astro';
+import WhatsAppCTA from '../../WhatsAppCTA.astro';
+
+interface Props {
+  message?: string;
+}
+const { message } = Astro.props;
+
+const oferecemos = [
+  'Escuta clínica completa, com atenção à sua história e ao que você sente.',
+  'Conversa clara sobre o que está acontecendo com você, sem pressa.',
+  'Construção conjunta do caminho de cuidado, com medicação quando for o caso, sempre explicada.',
+  'Acompanhamento próximo, com segurança, vínculo e constância.',
+  'Atendimento 100% online, em ambiente reservado, com sigilo e cuidado com a sua privacidade.',
+];
+---
+
+<section class="dvlp-problem band-light">
+  <Container class="dvlp-problem__inner">
+    <div class="dvlp-problem__offer">
+      <div class="dvlp-problem__quote">
+        <p>
+          Se você está pensando em marcar uma consulta, é bom lembrar: essa decisão raramente é leve. Muita
+          gente que chega até mim já passou por atendimentos rápidos, respostas apressadas ou tratamentos que
+          nunca foram bem explicados.
+        </p>
+        <p class="dvlp-problem__quote-highlight">
+          Aqui, o objetivo é outro: entender a sua história com calma, organizar o que você sente com
+          clareza e construir, junto com você, um caminho de cuidado possível — ético e no seu tempo.
+        </p>
+      </div>
+
+      <div class="dvlp-problem__offer-card">
+        <div class="dvlp-problem__offer-media">
+          <img src="/images/hero/dor.webp" alt="Consulta em ambiente acolhedor" loading="lazy" />
+        </div>
+        <div class="dvlp-problem__offer-body">
+          <h3>Oferecemos:</h3>
+          <ul class="dvlp-problem__offer-list">
+            {oferecemos.map((item) => <li>{item}</li>)}
+          </ul>
+          <div class="dvlp-problem__offer-cta">
+            <WhatsAppCTA message={message} label="Agendar via WhatsApp" variant="primary" class="dvlp-problem__cta" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .dvlp-problem {
+    /* margin-top negativo puxa o cartão escuro pra cima, sobrepondo um
+       pouco o fim do Hero (mesma técnica da referência: cartão "flutuando"
+       por cima da seção anterior) — junto com o topo raso, dá a sensação de
+       continuação do Hero, não de seção nova começando. */
+    position: relative;
+    margin-top: clamp(-56px, -6vw, -32px);
+    padding-top: clamp(0.75rem, 2vw, 1.25rem);
+    padding-bottom: var(--section-pad);
+    font-family: 'DM Sans', sans-serif;
+  }
+  /* :global() necessário — .dvlp-problem__inner é a classe raiz do
+     <Container> (componente filho), o CSS escopado normal do Astro não
+     alcançaria (mesmo bug já corrigido em outros blocos nesta sessão). */
+  :global(.dvlp-problem__inner) {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .dvlp-problem__offer {
+    max-width: 980px;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .dvlp-problem__quote {
+    position: relative;
+    background: var(--color-espresso);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2rem);
+    text-align: center;
+  }
+  .dvlp-problem__quote p {
+    color: var(--color-sand);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: none;
+    margin: 0 0 1rem;
+  }
+  .dvlp-problem__quote-highlight {
+    color: var(--color-ivory) !important;
+    font-weight: 600;
+    margin-bottom: 0 !important;
+  }
+  /* "Entalhe" decorativo no encontro dos dois cartões (seta pra baixo). */
+  .dvlp-problem__quote::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 20px;
+    height: 20px;
+    background: var(--color-espresso);
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 0 0 4px 0;
+  }
+
+  .dvlp-problem__offer-card {
+    position: relative;
+    margin: -1.75rem 0.75rem 0;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: clamp(1.1rem, 3vw, 2rem);
+    display: grid;
+    gap: 1.75rem;
+    text-align: center;
+  }
+  @media (max-width: 420px) {
+    .dvlp-problem__offer-card {
+      margin-inline: 0.75rem;
+    }
+  }
+  @media (min-width: 780px) {
+    .dvlp-problem__offer-card {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      align-items: center;
+      text-align: left;
+      padding: clamp(1.5rem, 3vw, 2rem) clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2rem);
+    }
+  }
+  .dvlp-problem__offer-media {
+    margin-inline: auto;
+    max-width: 280px;
+    width: 100%;
+  }
+  @media (min-width: 780px) {
+    .dvlp-problem__offer-media {
+      max-width: none;
+    }
+  }
+  .dvlp-problem__offer-media img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+  .dvlp-problem__offer-card h3 {
+    font-family: 'Outfit', sans-serif;
+    margin: 0 0 1.25rem;
+  }
+  .dvlp-problem__offer-list {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    text-align: left;
+  }
+  .dvlp-problem__offer-list li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--color-coffee);
+  }
+  .dvlp-problem__offer-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #25d366;
+    font-weight: 700;
+  }
+  .dvlp-problem__offer-cta {
+    display: flex;
+    justify-content: center;
+  }
+  @media (min-width: 780px) {
+    .dvlp-problem__offer-cta {
+      justify-content: flex-start;
+    }
+  }
+
+  /* :global() necessário — .dvlp-problem__cta é aplicado no <a> renderizado
+     por WhatsAppCTA.astro (componente compartilhado); mesma técnica já usada
+     no Hero, sem tocar no arquivo original nem afetar outros CTAs da página. */
+  :global(.dvlp-problem__cta.wa-cta--primary) {
+    background: #25d366;
+    color: #0b3b23;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+  }
+  :global(.dvlp-problem__cta.wa-cta--primary:hover) {
+    background: #1fb857;
+    color: #0b3b23;
+  }
+  /* Container aqui é mais estreito que o de outros CTAs da página (cartão
+     dentro de cartão, com margem negativa) — sem isso o rótulo "Agendar via
+     WhatsApp" quebra em 2 linhas nas telas mais estreitas (< 420px). */
+  @media (max-width: 420px) {
+    :global(.dvlp-problem__cta.wa-cta--primary) {
+      padding-inline: 1.2rem;
+      font-size: 0.8rem;
+    }
+  }
+</style>

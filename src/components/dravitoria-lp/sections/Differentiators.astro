@@ -1,0 +1,88 @@
+---
+// Bloco 5 — Differentiators: 4 cards com ícone em badge, fundo escuro
+// (band-dark). Restyle inspirado na seção "Como eu enxergo a psiquiatria no
+// consultório" da referência (Paola Ferrer/Claude Design) — mesma composição
+// (badge de ícone flutuando sobre cartão claro, fundo escuro), copy 100%
+// reescrita: o card "diagnóstico como ferramenta" virou "clareza, não
+// rótulo" (ela não pode reivindicar ato diagnóstico, régua do brief).
+import Section from '../../ui/Section.astro';
+import { differentiators } from '../../../data/dravitoria-lp/copy';
+---
+
+<Section band="dark" tight class="dvlp-diff">
+  <span class="eyebrow">Como eu vejo esse cuidado</span>
+  <h2>O que sustenta o cuidado, no consultório online</h2>
+  <div class="dvlp-diff__grid">
+    {
+      differentiators.map((d) => (
+        <div class="dvlp-diff__card">
+          <span class="dvlp-diff__icon" aria-hidden="true">
+            {d.icon}
+          </span>
+          <h3>{d.title}</h3>
+          <p>{d.desc}</p>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-diff é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-diff) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-diff) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-diff__grid {
+    margin-top: 2.25rem;
+    display: grid;
+    gap: 1.5rem 1rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .dvlp-diff__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .dvlp-diff__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .dvlp-diff__card {
+    position: relative;
+    background: var(--color-ivory);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 1.25rem 1.25rem;
+  }
+  .dvlp-diff__icon {
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-espresso);
+    color: var(--color-sand);
+    border-radius: var(--radius-sm);
+    font-size: 1.3rem;
+  }
+  .dvlp-diff__card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+    color: var(--color-espresso);
+  }
+  .dvlp-diff__card p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--color-coffee);
+    max-width: none;
+  }
+</style>

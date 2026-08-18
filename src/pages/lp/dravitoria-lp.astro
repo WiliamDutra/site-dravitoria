@@ -1,0 +1,86 @@
+---
+// Esqueleto da LP isolada (porte do drpaulo, ver PORTING.md em C:\work\drpaulo
+// e o plano desta sessão). noindex, não entra no sitemap (filtro existente em
+// astro.config.mjs cobre /lp/). Bloco 11 (Footer) vem do BaseLayout — não é
+// duplicado aqui.
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import { faqGeral } from '../../data/faqGeral';
+
+import Hero from '../../components/dravitoria-lp/sections/Hero.astro';
+import ProblemSection from '../../components/dravitoria-lp/sections/ProblemSection.astro';
+import PainPoints from '../../components/dravitoria-lp/sections/PainPoints.astro';
+import Differentiators from '../../components/dravitoria-lp/sections/Differentiators.astro';
+import ProcessSteps from '../../components/dravitoria-lp/sections/ProcessSteps.astro';
+import Specialties from '../../components/dravitoria-lp/sections/Specialties.astro';
+import AboutDoctor from '../../components/dravitoria-lp/sections/AboutDoctor.astro';
+import FinalCta from '../../components/dravitoria-lp/sections/FinalCta.astro';
+import InstagramSection from '../../components/dravitoria-lp/sections/InstagramSection.astro';
+// import SocialProof from '../../components/dravitoria-lp/sections/SocialProof.astro'; // removido a pedido, ver uso comentado abaixo
+import ClinicEnvironment from '../../components/dravitoria-lp/sections/ClinicEnvironment.astro';
+import SchedulingForm from '../../components/dravitoria-lp/sections/SchedulingForm.astro';
+
+const lpMsg = 'Olá, Dra. Vitória! Vim de um anúncio e gostaria de marcar uma consulta online. 🤍';
+// Régua do brief (dra-vitoria-dados-lp.md): nada de "psiquiatra"/"psiquiatria"
+// em peça de tráfego pago até o RQE validado. faqGeral.ts é compartilhado
+// (não mexo nele), então filtro aqui, só nesta LP, os itens que usam o termo.
+const lpFaqs = faqGeral.filter((f) => !/psiquiatr/i.test(f.q) && !/psiquiatr/i.test(f.a)).slice(0, 6);
+---
+
+<BaseLayout
+  title="Cuidar de você não é luxo nem fraqueza | Dra. Vitória Gomes"
+  description="Médica em saúde mental por telemedicina, para todo o Brasil. Um cuidado que olha você por inteiro."
+  noindex={true}
+  hideHeader={true}
+>
+  <Fragment slot="head">
+    <!-- Fontes só desta LP: Outfit (títulos) + DM Sans (corpo). Não mexe no BaseLayout. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </Fragment>
+
+  <div class="dvlp-page">
+    <Hero message={lpMsg} />
+    <ProblemSection message={lpMsg} />
+    <PainPoints />
+    <Differentiators />
+    <ProcessSteps message={lpMsg} />
+    <Specialties message={lpMsg} />
+    <AboutDoctor message={lpMsg} />
+    <FinalCta message={lpMsg} />
+    <InstagramSection />
+    {/* <SocialProof /> — removido a pedido; sem avaliação real ainda, componente mantido pra religar depois. */}
+    <ClinicEnvironment />
+    <SchedulingForm message={lpMsg} />
+
+    <Section band="ivory" tight>
+      <h2 class="dvlp-faq-heading">Perguntas frequentes</h2>
+      <div class="dvlp-faq">
+        <FAQAccordion items={lpFaqs} />
+      </div>
+    </Section>
+  </div>
+</BaseLayout>
+
+<style>
+  .dvlp-page {
+    --section-pad: clamp(3.5rem, 7vw, 5.5rem);
+    --container-pad: clamp(1rem, 4vw, 3rem);
+  }
+  .dvlp-page :global(.section--tight) {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+  .dvlp-faq-heading {
+    font-family: 'Outfit', sans-serif;
+    text-align: center;
+  }
+  .dvlp-faq {
+    max-width: 780px;
+    margin-inline: auto;
+  }
+</style>

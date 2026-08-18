@@ -1,0 +1,147 @@
+---
+// Bloco 3 — Specialties: restyle pra checklist dentro de UM cartão escuro
+// (Iteração 3, inspirado em "Principais quadros que atendo" da referência
+// Paola Ferrer/Claude Design) — antes era um grid solto de cards individuais
+// claros sobre fundo escuro; agora é uma lista dentro de um único cartão
+// escuro sobre fundo claro. Mesmo dado real de antes (clinicalConditions).
+import Section from '../../ui/Section.astro';
+import WhatsAppCTA from '../../WhatsAppCTA.astro';
+import { specialties } from '../../../data/dravitoria-lp/specialties';
+
+interface Props {
+  message?: string;
+}
+const { message } = Astro.props;
+---
+
+<Section band="light" tight class="dvlp-specialties">
+  <span class="eyebrow">Como posso te ajudar</span>
+  <h2>Condições que eu cuido</h2>
+  <p class="lead" style="max-width: 58ch;">Cada uma com um olhar próprio, no seu tempo, nunca uma receita de bolo.</p>
+
+  <div class="dvlp-specialties__grid">
+    <div class="dvlp-specialties__media">
+      <img src="/images/hero/card1.webp" alt="Consulta online, ambiente acolhedor" loading="lazy" />
+      <img src="/images/hero/card2.webp" alt="Consulta online, ambiente acolhedor" loading="lazy" />
+      <img src="/images/hero/card3.webp" alt="Consulta online, ambiente acolhedor" loading="lazy" />
+      <img src="/images/hero/card4.webp" alt="Consulta online, ambiente acolhedor" loading="lazy" />
+    </div>
+
+    <div class="dvlp-specialties__card">
+      <ul class="dvlp-specialties__list">
+        {
+          specialties.map((s) => (
+            <li>
+              <span class="dvlp-specialties__icon" aria-hidden="true">
+                {s.icon}
+              </span>
+              <span>
+                <a href={s.href} class="dvlp-specialties__title">
+                  {s.title}
+                </a>
+                <span class="dvlp-specialties__desc">{s.desc}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="dvlp-specialties__cta">
+    <WhatsAppCTA message={message} label="Falar sobre o meu caso" variant="primary" class="dvlp-specialties__cta-btn" />
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-specialties é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-specialties) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-specialties) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-specialties__grid {
+    margin-top: 2rem;
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 780px) {
+    .dvlp-specialties__grid {
+      grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+      align-items: stretch;
+    }
+  }
+  .dvlp-specialties__media {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+  .dvlp-specialties__media img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+  .dvlp-specialties__card {
+    background: var(--color-espresso);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+  }
+  .dvlp-specialties__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .dvlp-specialties__list li {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+  .dvlp-specialties__icon {
+    color: var(--color-clay);
+    font-size: 1rem;
+    line-height: 1.6;
+    flex-shrink: 0;
+  }
+  .dvlp-specialties__title {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-ivory) !important;
+    text-decoration: none;
+  }
+  .dvlp-specialties__title:hover {
+    color: var(--color-sand) !important;
+  }
+  .dvlp-specialties__desc {
+    display: block;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-sand);
+    margin-top: 0.15rem;
+  }
+  .dvlp-specialties__cta {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* :global() necessário — .dvlp-specialties__cta-btn é aplicado no <a>
+     renderizado por WhatsAppCTA.astro (componente compartilhado); mesmo
+     padrão verde WhatsApp já usado no Hero/ProblemSection/FinalCta. */
+  :global(.dvlp-specialties__cta-btn.wa-cta--primary) {
+    background: #25d366;
+    color: #0b3b23;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+  }
+  :global(.dvlp-specialties__cta-btn.wa-cta--primary:hover) {
+    background: #1fb857;
+    color: #0b3b23;
+  }
+</style>

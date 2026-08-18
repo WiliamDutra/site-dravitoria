@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
 
 // Domínio confirmado e registrado no Registro.br (verificado em 16/07/2026).
 // Pode ser sobrescrito por PUBLIC_SITE_URL no .env, se um dia mudar.
@@ -28,5 +29,7 @@ export default defineConfig({
         locales: { 'pt-BR': 'pt-BR' },
       },
     }),
+    // React só é usado pela galeria expansível da LP isolada em /lp/dravitoria-lp.
+    react(),
   ],
 });

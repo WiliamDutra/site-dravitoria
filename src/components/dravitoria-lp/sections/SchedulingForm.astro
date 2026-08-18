@@ -1,0 +1,79 @@
+---
+// Bloco 9 — SchedulingForm: no drpaulo tem um formulário de campos que hoje
+// fica desativado (só o WhatsApp está ativo) + links de Instagram. Aqui
+// segue o mesmo padrão: sem formulário de fato, só Instagram real + WhatsApp.
+// A Dra. Vitória tem 1 Instagram (não "médico + clínica" separados).
+import Section from '../../ui/Section.astro';
+import WhatsAppCTA from '../../WhatsAppCTA.astro';
+import { site } from '../../../data/site';
+
+interface Props {
+  message?: string;
+}
+const { message } = Astro.props;
+---
+
+<Section band="mid" class="dvlp-scheduling">
+  <div class="dvlp-scheduling__inner">
+    <span class="eyebrow">Vamos conversar</span>
+    <h2>Fale comigo pelo WhatsApp ou me acompanhe no Instagram</h2>
+    <p>
+      O agendamento é feito com carinho pelo WhatsApp, sem formulário de cadastro. Convite ao cuidado, sem
+      compromisso e sem pressa.
+    </p>
+    <div class="dvlp-scheduling__actions">
+      <WhatsAppCTA message={message} label="Agendar pelo WhatsApp" variant="primary" class="dvlp-scheduling__cta-btn" />
+      <a href={site.canais.instagramUrl} target="_blank" rel="noopener noreferrer" class="dvlp-scheduling__ig">
+        Instagram {site.canais.instagram}
+      </a>
+    </div>
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-scheduling é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-scheduling) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-scheduling) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-scheduling__inner {
+    max-width: 620px;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .dvlp-scheduling__actions {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .dvlp-scheduling__ig {
+    color: var(--color-ivory);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid var(--color-clay);
+    padding-bottom: 2px;
+  }
+  .dvlp-scheduling__ig:hover {
+    color: var(--color-clay);
+  }
+
+  /* :global() necessário — .dvlp-scheduling__cta-btn é aplicado no <a>
+     renderizado por WhatsAppCTA.astro (componente compartilhado); mesmo
+     padrão verde WhatsApp já usado no Hero/ProblemSection/FinalCta. */
+  :global(.dvlp-scheduling__cta-btn.wa-cta--primary) {
+    background: #25d366;
+    color: #0b3b23;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+  }
+  :global(.dvlp-scheduling__cta-btn.wa-cta--primary:hover) {
+    background: #1fb857;
+    color: #0b3b23;
+  }
+</style>

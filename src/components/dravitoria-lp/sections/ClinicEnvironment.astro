@@ -1,0 +1,48 @@
+---
+// Bloco 8 — ClinicEnvironment: no drpaulo é foto do consultório + mapa +
+// endereço/horário. A Dra. Vitória é 100% telemedicina — não há endereço
+// físico. Fica no esqueleto porque foi pedido, mas com placeholder explícito
+// em vez de simular um endereço/mapa falso. Decisão sobre manter/mudar o
+// propósito desta seção fica para depois, junto com o usuário (ver plano).
+import Section from '../../ui/Section.astro';
+import { site } from '../../../data/site';
+---
+
+<Section band="light" tight class="dvlp-clinic">
+  <span class="eyebrow">Onde e como eu atendo</span>
+  <h2>Um cuidado que cabe na sua rotina</h2>
+  <p class="dvlp-clinic__lead">{site.alcance}.</p>
+  <div class="dvlp-clinic__grid">
+    <img
+      src="/images/teleconsulta/teleconsulta.webp"
+      alt="Consulta online por videochamada"
+      loading="lazy"
+    />
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-clinic é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-clinic) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-clinic) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-clinic__lead {
+    font-size: 1.05rem;
+  }
+  .dvlp-clinic__grid {
+    margin-top: 2rem;
+    max-width: 820px;
+  }
+  .dvlp-clinic__grid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+  }
+</style>

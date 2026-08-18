@@ -1,0 +1,60 @@
+---
+// Bloco 7 — SocialProof: grid ESTÁTICO de prints de avaliação (diferente da
+// galeria interativa do bloco 2). Só mostra imagem real quando houver item
+// com `consentido: true` (mesma régua de src/components/TestimonialSlider.astro).
+import Section from '../../ui/Section.astro';
+import PlaceholderImage from '../ui/PlaceholderImage.astro';
+import { reviewScreenshots, reviewScreenshotsPublicaveis } from '../../../data/dravitoria-lp/reviews';
+
+const temPrintsReais = reviewScreenshotsPublicaveis.length > 0;
+---
+
+<Section band="ivory" class="dvlp-social-proof">
+  <span class="eyebrow">Quem já se cuidou comigo</span>
+  <h2>Avaliações de pacientes</h2>
+  <div class="dvlp-social-proof__grid">
+    {
+      temPrintsReais
+        ? reviewScreenshotsPublicaveis.map((r) => (
+            <img class="dvlp-social-proof__img" src={r.image} alt={r.alt} loading="lazy" />
+          ))
+        : reviewScreenshots.map((r) => <PlaceholderImage label={r.alt} aspectRatio="3 / 4" />)
+    }
+  </div>
+  <p class="dvlp-social-proof__note">Relatos reais, anônimos quando necessário e com consentimento.</p>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-social-proof é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-social-proof) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-social-proof) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-social-proof__grid {
+    margin-top: 2rem;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 768px) {
+    .dvlp-social-proof__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .dvlp-social-proof__img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+  }
+  .dvlp-social-proof__note {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+</style>

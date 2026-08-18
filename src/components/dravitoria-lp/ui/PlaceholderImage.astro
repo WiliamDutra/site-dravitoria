@@ -1,0 +1,56 @@
+---
+// Placeholder visual para fotos reais que ainda não foram fornecidas.
+// Buscar por "PlaceholderImage" quando as fotos definitivas chegarem.
+interface Props {
+  label: string;
+  aspectRatio?: string;
+  class?: string;
+}
+
+const { label, aspectRatio = '4 / 5', class: className } = Astro.props;
+---
+
+<div class:list={['placeholder-image', className]} style={`aspect-ratio: ${aspectRatio};`}>
+  <div class="placeholder-image__inner">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      aria-hidden="true"
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <circle cx="9" cy="10" r="1.5" />
+      <path d="M3 16l5-4 4 3 3-3 6 5" />
+    </svg>
+    <span class="placeholder-image__label">[FOTO: {label} — substituir em produção]</span>
+  </div>
+</div>
+
+<style>
+  .placeholder-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-clay);
+    background: var(--surface);
+  }
+  .placeholder-image__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1.5rem;
+    text-align: center;
+    color: var(--color-clay);
+  }
+  .placeholder-image__label {
+    font-family: 'Jost', sans-serif;
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+</style>

@@ -14,6 +14,7 @@ interface Props {
   ogType?: 'website' | 'article';
   schemaNodes?: object[];
   headerTransparent?: boolean;
+  hideHeader?: boolean; // LPs de tráfego: sem nav pra não distrair do CTA
   bodyClass?: string;
 }
 
@@ -25,6 +26,7 @@ const {
   ogType = 'website',
   schemaNodes = [],
   headerTransparent = false,
+  hideHeader = false,
   bodyClass = '',
 } = Astro.props;
 
@@ -55,6 +57,42 @@ const nodes = [...siteGraph(), ...schemaNodes];
       })(window, document, 'script', 'dataLayer', 'GTM-5F39JMCQ');
     </script>
     <!-- End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) — GA4 + Google Ads -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-MQJPTVPK4Z"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-MQJPTVPK4Z');
+      gtag('config', 'AW-18373087540');
+    </script>
+    <!-- End Google tag -->
+
+    <!-- Meta Pixel Code -->
+    <script is:inline>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '2155880845804771');
+      fbq('track', 'PageView');
+    </script>
+    <!-- End Meta Pixel Code -->
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -109,8 +147,18 @@ const nodes = [...siteGraph(), ...schemaNodes];
       ></noscript
     >
     <!-- End Google Tag Manager (noscript) -->
+    <!-- Meta Pixel Code (noscript) -->
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display:none"
+        src="https://www.facebook.com/tr?id=2155880845804771&ev=PageView&noscript=1"
+      /></noscript
+    >
+    <!-- End Meta Pixel Code (noscript) -->
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <Header transparent={headerTransparent} />
+    {!hideHeader && <Header transparent={headerTransparent} />}
     <main id="conteudo">
       <slot />
     </main>

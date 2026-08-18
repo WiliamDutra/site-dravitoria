@@ -1,0 +1,148 @@
+---
+// NOVO (Iteração 3) — "Talvez você se reconheça em alguma dessas
+// situações", inspirado na referência Paola Ferrer/Claude Design. Só
+// descreve frustrações do PACIENTE com atendimentos passados — nenhum ato
+// clínico da Dra. Vitória é prometido aqui, por isso não esbarra na régua de
+// compliance (sem diagnóstico à distância, sem "psiquiatra"). Layout 2
+// colunas (lista + 2 fotos empilhadas) igual à referência — fotos em
+// placeholder até termos foto real de atendimento (sem consultório físico
+// pra fotografar, mas a videochamada/ambiente de trabalho dela serve aqui).
+import Section from '../../ui/Section.astro';
+import { painPoints, painPointsClosing } from '../../../data/dravitoria-lp/copy';
+---
+
+<Section band="ivory" class="dvlp-pain">
+  <h2>
+    Talvez você <em>se reconheça</em> em alguma dessas situações:
+  </h2>
+
+  <div class="dvlp-pain__grid">
+    <div class="dvlp-pain__card">
+      <ul class="dvlp-pain__list">
+        {painPoints.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+    <div class="dvlp-pain__media">
+      <img src="/images/hero/atendimento.webp" alt="Dra. Vitória Gomes, atendimento em saúde mental" loading="lazy" />
+    </div>
+  </div>
+
+  <div class="dvlp-pain__closing-wrap">
+    <span class="dvlp-pain__closing-badge" aria-hidden="true">✓</span>
+    <p class="dvlp-pain__closing">{painPointsClosing}</p>
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-pain é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-pain) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-pain) h2 {
+    font-family: 'Outfit', sans-serif;
+    text-align: center;
+    max-width: 34ch;
+    margin-inline: auto;
+  }
+  :global(.dvlp-pain) h2 em {
+    font-style: normal;
+    color: var(--color-primary);
+  }
+  .dvlp-pain__grid {
+    max-width: 980px;
+    margin: 2rem auto 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 780px) {
+    .dvlp-pain__grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      align-items: stretch;
+    }
+  }
+  .dvlp-pain__card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+  }
+  .dvlp-pain__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .dvlp-pain__list li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--color-coffee);
+  }
+  .dvlp-pain__list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+  .dvlp-pain__media {
+    display: flex;
+  }
+  .dvlp-pain__media img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: var(--radius-md);
+  }
+  @media (min-width: 780px) {
+    .dvlp-pain__media {
+      height: 100%;
+      align-items: center;
+    }
+    .dvlp-pain__media img {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+  }
+  .dvlp-pain__closing-wrap {
+    position: relative;
+    max-width: 640px;
+    margin: 1.75rem auto 0;
+  }
+  .dvlp-pain__closing {
+    background: var(--color-espresso);
+    color: var(--color-ivory) !important;
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  /* Selo circular sobrepondo o topo do cartão escuro — mesma técnica de
+     "elemento flutuando no encontro entre blocos" já usada no Hero/quote da
+     ProblemSection, aqui como marca de fechamento em vez de retrato. */
+  .dvlp-pain__closing-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+    color: var(--color-ivory);
+    border-radius: 50%;
+    border: 3px solid var(--color-cream);
+    font-size: 1.05rem;
+    font-weight: 700;
+    z-index: 1;
+  }
+</style>

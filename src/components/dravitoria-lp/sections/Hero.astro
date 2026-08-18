@@ -1,0 +1,247 @@
+---
+// Bloco 1 — Hero. Layout de referência: duas colunas, fundo claro, foto
+// contida à direita, marca + identificação no topo, headline direta, CTA em
+// pill. A borda esquerda da foto tem uma máscara em degradê (mask-image) que
+// a funde com o fundo creme da seção, em vez do corte reto entre coluna de
+// texto e foto.
+//
+// Segunda referência (print de outra LP, "Paola Ferrer"): barra de aviso no
+// topo, badge sob a headline, parágrafo reestruturado, CTA verde mais
+// chamativo. Adaptado, NÃO copiado 1:1 — aquela referência é de uma médica
+// com RQE validado, que pode dizer "psiquiátrico"/"diagnóstico preciso"/
+// "plano terapêutico". A Dra. Vitória não pode (regra do brief, RQE ainda
+// não validado) — toda palavra clínica/restrita foi trocada por versão
+// compatível, e nenhuma faixa etária foi inventada (não temos esse dado real,
+// diferente da referência).
+import WhatsAppCTA from '../../WhatsAppCTA.astro';
+import { site } from '../../../data/site';
+
+interface Props {
+  message?: string;
+}
+const { message } = Astro.props;
+---
+
+<header class="dvlp-hero">
+  <p class="dvlp-hero__topbar">
+    Atendimento em saúde mental por telemedicina, para todo o Brasil — {site.nome}, {site.titulo} · {site.crm}
+  </p>
+
+  <div class="dvlp-hero__grid">
+    <div class="dvlp-hero__content">
+      <div class="dvlp-hero__wordmark">
+        <span>{site.nome}</span>
+      </div>
+      <div class="dvlp-hero__meta">
+        <span class="dvlp-hero__role">{site.titulo}</span>
+        <p class="dvlp-hero__identify">
+          {site.nomeCompleto}<br />
+          {site.crm}{site.rqe ? ` / ${site.rqe}` : ''}
+        </p>
+      </div>
+
+      <h1 class="dvlp-hero__title">
+        {/* Frase-âncora oficial do brief (dra-vitoria-dados-lp.md), com destaque em itálico
+          — mesmo tratamento da referência ("Atendimento *psiquiátrico* online..."). */}
+        Você não está quebrada. Talvez ninguém tenha olhado você <em>por inteiro</em> ainda.
+      </h1>
+
+      <span class="dvlp-hero__pill">Atendimento 100% online · Todo o Brasil</span>
+
+      <p class="dvlp-hero__subtext">
+        Consultas com <strong>tempo adequado</strong> e escuta cuidadosa, para entender a sua história com
+        calma e construir, junto com você, <strong>um caminho de cuidado possível</strong> — sem pressa e sem
+        promessa vazia.
+      </p>
+
+      <div class="dvlp-hero__actions">
+        <WhatsAppCTA
+          message={message}
+          label="Agendar via WhatsApp"
+          variant="primary"
+          class="dvlp-hero__cta"
+        />
+      </div>
+    </div>
+
+    <div class="dvlp-hero__media">
+      <img
+        src="/images/hero/dravitoria-hero.png"
+        alt="Dra. Vitória Gomes, médica"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</header>
+
+<style>
+  .dvlp-hero {
+    background: var(--color-cream);
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 28px, rgba(168, 140, 122, 0.08) 28px 29px),
+      repeating-linear-gradient(-45deg, transparent 0 28px, rgba(168, 140, 122, 0.08) 28px 29px);
+    color: var(--color-espresso);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+  .dvlp-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    min-height: clamp(440px, 65vh, 640px);
+  }
+  @media (min-width: 900px) {
+    .dvlp-hero__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .dvlp-hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 5vw, 4rem);
+    max-width: 620px;
+  }
+  .dvlp-hero__media {
+    position: relative;
+    min-height: 260px;
+  }
+  .dvlp-hero__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Centraliza o rosto dela no recorte (em vez de ancorar no topo, que
+       sobrava parede/cortina em cima e cortava o corpo embaixo em telas mais
+       altas) — corta um pouco mais de cima/baixo pra manter o rosto sempre
+       visível e bem enquadrado, independente da altura da seção. */
+    object-position: center 30%;
+    /* Funde a foto com o fundo creme da seção — em vez do corte reto entre
+       coluna de texto e foto, a borda esquerda dissolve gradualmente,
+       criando a sensação de uma peça só (em vez de duas caixas coladas). */
+    mask-image: linear-gradient(to right, transparent 0%, black 18%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 18%);
+  }
+
+  .dvlp-hero__topbar {
+    /* max-width: none sobrescreve o `p { max-width: 70ch }` global do site
+       (src/styles/global.css) — sem isso a barra parava na metade da tela. */
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    padding: 0.55rem 1.5rem;
+    background: var(--color-espresso);
+    color: var(--color-ivory);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    text-align: center;
+  }
+
+  .dvlp-hero__wordmark {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+  .dvlp-hero__wordmark span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-espresso);
+  }
+  /* Bloco de especialidade + identificação, centralizado numa caixa mais
+     estreita sob um divisor — mesmo detalhe da referência (a marca em cima é
+     alinhada à esquerda, mas essa parte de baixo fica centralizada). */
+  .dvlp-hero__meta {
+    max-width: 260px;
+    margin: 0 0 1.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-line);
+    text-align: center;
+  }
+  .dvlp-hero__role {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-clay);
+    margin-bottom: 0.4rem;
+  }
+  .dvlp-hero__identify {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  .dvlp-hero__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 1.1rem;
+    margin-bottom: 1.5rem;
+    background: var(--color-espresso);
+    border-radius: var(--radius-pill);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-ivory);
+    box-shadow: var(--shadow-card);
+  }
+  .dvlp-hero__pill::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #25d366;
+    flex-shrink: 0;
+  }
+
+  .dvlp-hero__title {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.65rem, 3.4vw, 2.5rem);
+    line-height: 1.2;
+    font-weight: 500;
+    color: var(--color-espresso);
+    margin: 0 0 1.1rem;
+    max-width: 22ch;
+  }
+  .dvlp-hero__title em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+  .dvlp-hero__subtext {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-coffee);
+    max-width: 42ch;
+    margin-bottom: 2rem;
+  }
+  .dvlp-hero__subtext strong {
+    color: var(--color-espresso);
+    font-weight: 700;
+  }
+
+  .dvlp-hero__actions {
+    margin-bottom: 0;
+  }
+
+  /* :global() necessário — .dvlp-hero__cta é aplicado no <a> renderizado por
+     WhatsAppCTA.astro (componente compartilhado); não mexe no arquivo dele,
+     só sobrescreve a cor pra esta instância do Hero (verde WhatsApp, como na
+     referência) sem afetar os outros CTAs de WhatsApp da página/site. */
+  :global(.dvlp-hero__cta.wa-cta--primary) {
+    background: #25d366;
+    color: #0b3b23;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+  }
+  :global(.dvlp-hero__cta.wa-cta--primary:hover) {
+    background: #1fb857;
+    color: #0b3b23;
+  }
+</style>

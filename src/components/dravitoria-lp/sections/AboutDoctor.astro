@@ -1,0 +1,172 @@
+---
+// Bloco 4 — AboutDoctor: bio + credenciais + CTA + foto. Restyle (Iteração
+// 3, inspirado na seção "Sobre" da referência Paola Ferrer/Claude Design):
+// cartão claro de bio + NOVO cartão escuro "cuidado baseado em" logo abaixo.
+// O cartão escuro usa bullets tirados literalmente do brief
+// (dra-vitoria-dados-lp.md, "Posicionamento e diferencial") — NÃO a
+// biografia extensa da referência (hospitais/observership no Canadá etc.),
+// que não existe pra Dra. Vitória. Credenciais reais (formação UFCA,
+// pós-graduanda em Psiquiatria) — fonte: dra-vitoria-dados-lp.md.
+import Section from '../../ui/Section.astro';
+import WhatsAppCTA from '../../WhatsAppCTA.astro';
+import { site } from '../../../data/site';
+import { aboutBio, aboutAnchor, aboutCredentials, aboutApproach } from '../../../data/dravitoria-lp/copy';
+
+interface Props {
+  message?: string;
+}
+const { message } = Astro.props;
+---
+
+<Section band="mid" class="dvlp-about">
+  <div class="dvlp-about__grid">
+    <div class="dvlp-about__media">
+      <img
+        class="dvlp-about__photo"
+        src="/images/sobre/vitoria.webp"
+        width="900"
+        height="1125"
+        alt="Dra. Vitória Gomes, médica, em retrato com luz natural"
+        loading="lazy"
+      />
+    </div>
+    <div class="dvlp-about__text">
+      <div class="dvlp-about__bio-card">
+        <span class="eyebrow">Quem cuida de você</span>
+        <h2>{site.nome}</h2>
+        <p>{aboutBio}</p>
+        <p class="dvlp-about__anchor">“{aboutAnchor}”</p>
+        <ul class="dvlp-about__credentials">
+          <li>{site.identificacaoMedica}</li>
+          {aboutCredentials.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+
+      <div class="dvlp-about__approach-card">
+        <p class="dvlp-about__approach-lead">Hoje, atendo com um cuidado baseado em:</p>
+        <ul class="dvlp-about__approach-list">
+          {aboutApproach.map((a) => <li>{a}</li>)}
+        </ul>
+      </div>
+
+      <div class="dvlp-about__cta">
+        <WhatsAppCTA message={message} label="Agende sua consulta" variant="primary" class="dvlp-about__cta-btn" />
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  /* :global() necessário — .dvlp-about é a classe raiz do <Section>
+     (componente filho), o CSS escopado normal do Astro não alcançaria. */
+  :global(.dvlp-about) {
+    font-family: 'DM Sans', sans-serif;
+  }
+  :global(.dvlp-about) h2 {
+    font-family: 'Outfit', sans-serif;
+  }
+  .dvlp-about__grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .dvlp-about__grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: center;
+    }
+  }
+  .dvlp-about__photo {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    box-shadow: var(--shadow-card);
+  }
+  .dvlp-about__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .dvlp-about__bio-card {
+    background: var(--color-ivory);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+  }
+  .dvlp-about__bio-card .eyebrow {
+    color: var(--color-clay);
+  }
+  .dvlp-about__bio-card h2 {
+    color: var(--color-espresso);
+  }
+  .dvlp-about__bio-card p {
+    color: var(--color-coffee);
+  }
+  .dvlp-about__anchor {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 1.3rem;
+    color: var(--color-mocha) !important;
+    margin: 1.25rem 0;
+  }
+  .dvlp-about__credentials {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    color: var(--color-mocha);
+  }
+
+  .dvlp-about__approach-card {
+    background: var(--color-espresso);
+    border-radius: var(--radius-md);
+    padding: clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.25rem, 3vw, 1.75rem);
+  }
+  .dvlp-about__approach-lead {
+    margin: 0 0 0.9rem;
+    font-weight: 600;
+    color: var(--color-ivory) !important;
+  }
+  .dvlp-about__approach-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .dvlp-about__approach-list li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--color-sand);
+  }
+  .dvlp-about__approach-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--color-clay);
+  }
+
+  .dvlp-about__cta {
+    margin-top: 0.25rem;
+  }
+
+  /* :global() necessário — .dvlp-about__cta-btn é aplicado no <a> renderizado
+     por WhatsAppCTA.astro (componente compartilhado); mesmo padrão verde
+     WhatsApp já usado no Hero/ProblemSection/FinalCta. */
+  :global(.dvlp-about__cta-btn.wa-cta--primary) {
+    background: #25d366;
+    color: #0b3b23;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+  }
+  :global(.dvlp-about__cta-btn.wa-cta--primary:hover) {
+    background: #1fb857;
+    color: #0b3b23;
+  }
+</style>
