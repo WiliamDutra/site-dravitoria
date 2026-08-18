@@ -67,13 +67,17 @@ const { message } = Astro.props;
   /* :global() necessário — .dvlp-scheduling__cta-btn é aplicado no <a>
      renderizado por WhatsAppCTA.astro (componente compartilhado); mesmo
      padrão verde WhatsApp já usado no Hero/ProblemSection/FinalCta. */
+  /* !important necessário — a ordem em que o Astro concatena o CSS dos
+     componentes no build de produção não é garantida (difere do dev server);
+     sem isso, .wa-cta--primary do componente compartilhado pode vencer o
+     empate de especificidade e o botão volta pra cor padrão (marrom). */
   :global(.dvlp-scheduling__cta-btn.wa-cta--primary) {
-    background: #25d366;
-    color: #0b3b23;
-    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+    background: #25d366 !important;
+    color: #0b3b23 !important;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55) !important;
   }
   :global(.dvlp-scheduling__cta-btn.wa-cta--primary:hover) {
-    background: #1fb857;
-    color: #0b3b23;
+    background: #1fb857 !important;
+    color: #0b3b23 !important;
   }
 </style>

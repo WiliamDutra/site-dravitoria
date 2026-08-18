@@ -203,14 +203,18 @@ const oferecemos = [
   /* :global() necessário — .dvlp-problem__cta é aplicado no <a> renderizado
      por WhatsAppCTA.astro (componente compartilhado); mesma técnica já usada
      no Hero, sem tocar no arquivo original nem afetar outros CTAs da página. */
+  /* !important necessário — a ordem em que o Astro concatena o CSS dos
+     componentes no build de produção não é garantida (difere do dev server);
+     sem isso, .wa-cta--primary do componente compartilhado pode vencer o
+     empate de especificidade e o botão volta pra cor padrão (marrom). */
   :global(.dvlp-problem__cta.wa-cta--primary) {
-    background: #25d366;
-    color: #0b3b23;
-    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55);
+    background: #25d366 !important;
+    color: #0b3b23 !important;
+    box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.55) !important;
   }
   :global(.dvlp-problem__cta.wa-cta--primary:hover) {
-    background: #1fb857;
-    color: #0b3b23;
+    background: #1fb857 !important;
+    color: #0b3b23 !important;
   }
   /* Container aqui é mais estreito que o de outros CTAs da página (cartão
      dentro de cartão, com margem negativa) — sem isso o rótulo "Agendar via
